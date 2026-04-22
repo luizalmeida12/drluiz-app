@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dr. Luiz App">
+<title>Dr. Luiz — App Completo</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh}
+
+.header{background:#161b22;padding:14px 20px 12px;position:sticky;top:0;z-index:100;border-bottom:1px solid #30363d}
+.header-row{display:flex;justify-content:space-between;align-items:center}
+.header-title{font-size:18px;font-weight:700;background:linear-gradient(90deg,#58a6ff,#3fb950);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-date{font-size:11px;color:#8b949e;margin-top:2px}
+.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1f6feb,#238636);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+
+.nav{display:flex;background:#161b22;border-bottom:1px solid #30363d;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;min-width:60px;padding:10px 8px 8px;border:none;background:transparent;color:#8b949e;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:600;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:0.3px}
+.nav-btn.active{color:#58a6ff;border-bottom-color:#58a6ff}
+.nav-icon{font-size:17px}
+
+.page{display:none;padding:14px;padding-bottom:40px}
+.page.active{display:block}
+
+.sl{font-size:10px;font-weight:700;color:#8b949e;text-transform:uppercase;letter-spacing:1px;margin:18px 0 8px}
+
+.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden}
+.card.bt-blue::before,.card.bt-green::before,.card.bt-red::before,.card.bt-orange::before,.card.bt-purple::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
+.card.bt-blue::before{background:linear-gradient(90deg,#1f6feb,#58a6ff)}
+.card.bt-green::before{background:linear-gradient(90deg,#238636,#3fb950)}
+.card.bt-red::before{background:linear-gradient(90deg,#b91c1c,#f85149)}
+.card.bt-orange::before{background:linear-gradient(90deg,#9e6a03,#d29922)}
+.card.bt-purple::before{background:linear-gradient(90deg,#6e40c9,#bc8cff)}
+.ct{font-size:14px;font-weight:600;color:#e6edf3;margin-bottom:4px}
+.cs{font-size:12px;color:#8b949e;line-height:1.5}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+
+.sc{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px;text-align:center}
+.sn{font-size:26px;font-weight:700}
+.sn.bl{background:linear-gradient(135deg,#1f6feb,#58a6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sn.gr{background:linear-gradient(135deg,#238636,#3fb950);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sn.or{background:linear-gradient(135deg,#9e6a03,#d29922);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sn.pu{background:linear-gradient(135deg,#6e40c9,#bc8cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sl2{font-size:11px;color:#8b949e;margin-top:3px}
+
+.pw{background:rgba(255,255,255,0.06);border-radius:4px;height:5px;margin-top:8px;overflow:hidden}
+.pf{height:100%;border-radius:4px;transition:width 0.3s}
+.pf.bl{background:linear-gradient(90deg,#1f6feb,#58a6ff)}
+.pf.gr{background:linear-gradient(90deg,#238636,#3fb950)}
+.pf.or{background:linear-gradient(90deg,#9e6a03,#d29922)}
+
+.cc{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.cc.ok{background:linear-gradient(135deg,#238636,#3fb950);border:none}
+.cc.ok::after{content:"✓";color:#fff;font-size:13px;font-weight:700}
+.cs2{width:24px;height:24px;border-radius:7px;border:2px solid rgba(255,255,255,0.15);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.cs2.ok{background:linear-gradient(135deg,#238636,#3fb950);border:none}
+.cs2.ok::after{content:"✓";color:#fff;font-size:12px;font-weight:700}
+
+.ex-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.ex-row:last-child{border-bottom:none;padding-bottom:0}
+.ex-n{font-size:13px;font-weight:500;color:#e6edf3}
+.ex-d{font-size:11px;color:#8b949e;margin-top:2px}
+.ex-m{font-size:10px;font-weight:600;color:#58a6ff;margin-top:2px}
+
+.meal-row{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.meal-row:last-child{border-bottom:none;padding-bottom:0}
+.meal-hr{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.meal-t{font-size:11px;font-weight:700;color:#58a6ff}
+.meal-k{font-size:10px;color:#8b949e}
+.meal-n{font-size:13px;font-weight:600;color:#e6edf3;margin:3px 0}
+.meal-f{font-size:11px;color:#8b949e;line-height:1.5}
+
+.wg{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin:8px 0}
+.wc{height:34px;background:rgba(255,255,255,0.05);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;border:1px solid rgba(255,255,255,0.06);transition:all 0.2s}
+.wc.ok{background:rgba(31,111,235,0.2);border-color:rgba(88,166,255,0.4)}
+
+.dp{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:8px}
+.dp.bl{background:rgba(31,111,235,0.2);color:#58a6ff;border:1px solid rgba(88,166,255,0.3)}
+.dp.or{background:rgba(158,106,3,0.2);color:#d29922;border:1px solid rgba(210,153,34,0.3)}
+
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:14px}
+.wd{text-align:center;padding:7px 2px;border-radius:8px;cursor:pointer;border:1px solid transparent}
+.wdn{font-size:9px;color:#8b949e;font-weight:600}
+.wdd{font-size:16px;margin-top:2px}
+.wd.today{background:rgba(31,111,235,0.2);border-color:rgba(88,166,255,0.3)}
+.wd.sel{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.04)}
+
+.mac{text-align:center;background:rgba(255,255,255,0.04);border-radius:10px;padding:10px 4px;border:1px solid rgba(255,255,255,0.06)}
+.mv{font-size:18px;font-weight:700}
+.mv.bl{background:linear-gradient(135deg,#1f6feb,#58a6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.mv.or{background:linear-gradient(135deg,#9e6a03,#d29922);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.mv.rd{background:linear-gradient(135deg,#b91c1c,#f85149);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ml{font-size:10px;color:#8b949e;margin-top:2px}
+
+.btn{border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:600;cursor:pointer;width:100%;margin-top:8px;transition:opacity 0.2s}
+.btn:active{opacity:0.8}
+.btn-bl{background:#1f6feb;color:#fff}
+.btn-gr{background:#238636;color:#fff}
+.btn-rd{background:#b91c1c;color:#fff}
+.btn-gy{background:#21262d;color:#e6edf3;border:1px solid #30363d}
+
+input,textarea,select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #30363d;background:#0d1117;color:#e6edf3;font-size:13px;margin-top:4px;outline:none;font-family:inherit}
+input:focus,textarea:focus,select:focus{border-color:#58a6ff}
+input::placeholder,textarea::placeholder{color:#484f58}
+label{font-size:11px;color:#8b949e;display:block;margin-top:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.3px}
+textarea{resize:vertical}
+
+.task-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.task-row:last-child{border-bottom:none;padding-bottom:0}
+.ti{font-size:13px;font-weight:500;color:#e6edf3}
+.ti.done{text-decoration:line-through;color:#8b949e}
+.tm{font-size:11px;color:#8b949e;margin-top:2px}
+.tbadge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:5px;display:inline}
+.ta{background:rgba(184,24,24,0.2);color:#f85149;border:1px solid rgba(248,81,73,0.3)}
+.tm2{background:rgba(158,106,3,0.2);color:#d29922;border:1px solid rgba(210,153,34,0.3)}
+.tb{background:rgba(35,134,54,0.2);color:#3fb950;border:1px solid rgba(63,185,80,0.3)}
+.tc{background:rgba(31,111,235,0.2);color:#58a6ff;border:1px solid rgba(88,166,255,0.3)}
+.tdel{background:transparent;border:none;color:#f85149;font-size:16px;cursor:pointer;padding:2px 6px;flex-shrink:0}
+
+.banca-big{font-size:38px;font-weight:700;text-align:center;background:linear-gradient(135deg,#238636,#3fb950);-webkit-background-clip:text;-webkit-text-fill-color:transparent;padding:6px 0}
+.bet-row{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.bet-row:last-child{border-bottom:none;padding-bottom:0}
+.bet-j{font-size:13px;font-weight:600;color:#e6edf3;margin-bottom:3px}
+.bet-m{font-size:11px;color:#8b949e}
+.bet-st{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;display:inline-block}
+.bw{background:rgba(35,134,54,0.2);color:#3fb950}
+.bl2{background:rgba(184,24,24,0.2);color:#f85149}
+.bo{background:rgba(31,111,235,0.2);color:#58a6ff}
+.bet-edge{font-size:11px;font-weight:700;color:#3fb950}
+.bet-lp{font-size:11px;margin-top:3px}
+
+.mic-btn{width:58px;height:58px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto;transition:all 0.2s}
+.mic-idle{background:#21262d;border:2px solid #30363d}
+.mic-rec{background:#b91c1c;border:2px solid #f85149;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.mic-status{text-align:center;font-size:12px;color:#8b949e;padding:6px;min-height:22px}
+.voice-box{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:10px;font-size:12px;color:#8b949e;min-height:50px;line-height:1.6;margin-top:4px}
+.out-box{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;line-height:1.7;color:#e6edf3;white-space:pre-wrap;max-height:360px;overflow-y:auto;margin-top:10px}
+.copy-btn{background:#21262d;color:#58a6ff;border:1px solid #30363d;border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;width:100%;margin-top:6px}
+.copy-btn.copied{background:#238636;color:#fff;border-color:#238636}
+.sc-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.sc-row:last-child{border-bottom:none}
+.sc-l{font-size:12px;color:#e6edf3;flex:1;padding-right:8px}
+.sc-btns{display:flex;gap:5px}
+.sc-btn{padding:5px 12px;border-radius:7px;border:1px solid #30363d;background:#21262d;color:#8b949e;font-size:11px;font-weight:600;cursor:pointer}
+.sc-btn.yes{background:#1f6feb;color:#fff;border-color:#1f6feb}
+.sc-btn.no2{background:#21262d;color:#e6edf3;border-color:#30363d}
+.sc-tot{font-size:22px;font-weight:700;color:#58a6ff;text-align:center;margin:10px 0 3px}
+.ri{font-size:13px;font-weight:600;padding:5px 12px;border-radius:8px;display:inline-block}
+.ri-n{background:rgba(35,134,54,0.2);color:#3fb950}
+.ri-m{background:rgba(158,106,3,0.2);color:#d29922}
+.ri-a{background:rgba(184,24,24,0.2);color:#f85149}
+.rk{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;display:inline-block;margin-top:5px}
+.rk-l{background:rgba(35,134,54,0.15);color:#3fb950;border:1px solid rgba(63,185,80,0.3)}
+.rk-m{background:rgba(158,106,3,0.15);color:#d29922;border:1px solid rgba(210,153,34,0.3)}
+.rk-h{background:rgba(184,24,24,0.15);color:#f85149;border:1px solid rgba(248,81,73,0.3)}
+.rb{background:#0d1117;border:1px solid #30363d;border-radius:8px;padding:12px;margin-top:10px;text-align:center}
+.rv{font-size:28px;font-weight:700;color:#58a6ff}
+.rl{font-size:12px;color:#8b949e;margin-top:3px}
+.ps{display:flex;gap:3px;padding:3px;background:#0d1117;border-radius:8px;border:1px solid #30363d;margin-bottom:12px}
+.ps-btn{flex:1;padding:7px 4px;border:none;background:transparent;color:#8b949e;font-size:11px;font-weight:600;border-radius:6px;cursor:pointer}
+.ps-btn.active{background:#1f6feb;color:#fff}
+.drug-n{font-size:15px;font-weight:700;color:#58a6ff}
+.drug-c{font-size:11px;color:#8b949e;margin-top:2px}
+.drug-r{background:#0d1117;border:1px solid rgba(88,166,255,0.2);border-radius:8px;padding:10px;margin-top:8px;text-align:center}
+.dr-v{font-size:20px;font-weight:700;color:#3fb950}
+.dr-l{font-size:11px;color:#8b949e;margin-top:2px}
+.step-row{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.step-row:last-child{border-bottom:none}
+.step-n{width:26px;height:26px;border-radius:50%;background:#1f6feb;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-t{font-size:12px;color:#e6edf3;line-height:1.5;flex:1}
+.step-s{font-size:11px;color:#8b949e;margin-top:2px}
+.sal-bl{background:rgba(31,111,235,0.15);color:#58a6ff;border:1px solid rgba(88,166,255,0.3)}
+.sal-gr{background:rgba(35,134,54,0.15);color:#3fb950;border:1px solid rgba(63,185,80,0.3)}
+.sal-or{background:rgba(158,106,3,0.15);color:#d29922;border:1px solid rgba(210,153,34,0.3)}
+.sal-rd{background:rgba(184,24,24,0.15);color:#f85149;border:1px solid rgba(248,81,73,0.3)}
+.pac-card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:border-color 0.2s}
+.pac-card.sel{border-color:#58a6ff;background:#1c2128}
+.pac-n{font-size:14px;font-weight:600;color:#e6edf3}
+.pac-i{font-size:11px;color:#8b949e;margin-top:2px}
+.sal-p{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;display:inline-block;margin-top:5px}
+.sc3{display:flex;gap:6px;padding:3px;background:#0d1117;border-radius:8px;margin-bottom:12px}
+.sc3-btn{flex:1;padding:8px 4px;border:none;background:transparent;color:#8b949e;font-size:11px;font-weight:600;border-radius:6px;cursor:pointer;text-align:center}
+.sc3-btn.active{background:#1f6feb;color:#fff}
+.ai-load{text-align:center;padding:16px;color:#8b949e}
+.spin{width:22px;height:22px;border:2px solid #30363d;border-top-color:#58a6ff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sc-sh{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.sh{background:#21262d;border:1px solid #30363d;border-radius:7px;padding:6px 10px;font-size:11px;color:#8b949e;cursor:pointer}
+.sh:active{background:#30363d;color:#e6edf3}
+.vit-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.prof-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.prof-row:last-child{border-bottom:none}
+.prof-l{color:#8b949e}
+.prof-v{font-weight:600;color:#e6edf3}
+.tip-box{background:rgba(31,111,235,0.08);border:1px solid rgba(88,166,255,0.2);border-radius:10px;padding:11px;margin-top:10px}
+.tip-t{font-size:11px;font-weight:700;color:#58a6ff;margin-bottom:3px}
+.tip-s{font-size:11px;color:#8b949e;line-height:1.5}
+
+.section-title{font-size:15px;font-weight:700;color:#e6edf3;margin-bottom:8px}
+.subtitle{font-size:12px;color:#8b949e;margin-bottom:4px}
+.form-label{font-size:12px;color:#8b949e;margin-bottom:4px;display:block;margin-top:8px}
+.form-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;color:#e6edf3;font-size:13px;box-sizing:border-box;margin-bottom:4px}
+.form-input::placeholder{color:#484f58}
+.btn-primary{background:#1f6feb;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:600;cursor:pointer;width:100%}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-row">
+    <div>
+      <div class="header-title">Dr. Luiz App</div>
+      <div class="header-date" id="hdate"></div>
+    </div>
+    <div class="avatar">LA</div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="sp('hoje',this)"><span class="nav-icon">🏠</span>Hoje</button>
+  <button class="nav-btn" onclick="sp('treino',this)"><span class="nav-icon">💪</span>Treino</button>
+  <button class="nav-btn" onclick="sp('nutri',this)"><span class="nav-icon">🥗</span>Nutrição</button>
+  <button class="nav-btn" onclick="sp('agenda',this)"><span class="nav-icon">📋</span>Agenda</button>
+  <button class="nav-btn" onclick="sp('apostas',this)"><span class="nav-icon">⚽</span>Apostas</button>
+  <button class="nav-btn" onclick="sp('progresso',this)"><span class="nav-icon">📈</span>Progresso</button>
+  <button class="nav-btn" onclick="sp('clinica',this)"><span class="nav-icon">🩺</span>Clínica</button>
+  <button class="nav-btn" onclick="sp('ferramentas',this)"><span class="nav-icon">🔧</span>Ferramentas</button>
+  <button class="nav-btn" onclick="sp('financas',this)"><span class="nav-icon">💰</span>Finanças</button>
+  <button class="nav-btn" onclick="sp('senhas',this)"><span class="nav-icon">🔐</span>Senhas</button>
+</div>
+
+<!-- HOJE -->
+<div id="hoje" class="page active">
+  <div class="g2" style="margin-bottom:10px">
+    <div class="sc"><div class="sn bl" id="s_ex">0</div><div class="sl2">Exercícios</div></div>
+    <div class="sc"><div class="sn gr" id="s_ml">0</div><div class="sl2">Refeições</div></div>
+    <div class="sc"><div class="sn or" id="s_tk">0</div><div class="sl2">Tarefas</div></div>
+    <div class="sc"><div class="sn pu" id="s_wt">0</div><div class="sl2">Copos água</div></div>
+  </div>
+  <div class="card bt-blue">
+    <div class="ct">Treino de hoje</div>
+    <div id="h_trbadge" class="dp bl">...</div>
+    <div id="h_trsub" class="cs"></div>
+    <div class="pw"><div class="pf bl" id="h_trprog" style="width:0%"></div></div>
+  </div>
+  <div class="card bt-green">
+    <div class="ct">Hidratação — <span id="h_wc">0</span>/8 copos</div>
+    <div class="wg" id="wGrid"></div>
+    <div class="pw"><div class="pf bl" id="h_wprog" style="width:0%"></div></div>
+  </div>
+  <div class="card bt-orange">
+    <div class="ct">Meta calórica</div>
+    <div style="text-align:center;padding:8px 0"><div style="font-size:32px;font-weight:700;background:linear-gradient(90deg,#9e6a03,#d29922);-webkit-background-clip:text;-webkit-text-fill-color:transparent">2.800 kcal</div></div>
+    <div class="g3"><div class="mac"><div class="mv bl">180g</div><div class="ml">Proteína</div></div><div class="mac"><div class="mv or">350g</div><div class="ml">Carboidrato</div></div><div class="mac"><div class="mv rd">80g</div><div class="ml">Gordura</div></div></div>
+  </div>
+  <div class="card bt-purple">
+    <div class="ct">Banca — Apostas</div>
+    <div class="banca-big" id="h_banca">R$ 50.000</div>
+    <div class="cs" style="text-align:center" id="h_lucro">L/P: R$ 0,00</div>
+  </div>
+  <div class="card">
+    <div class="ct">Perfil</div>
+    <div class="prof-row"><span class="prof-l">Nome</span><span class="prof-v">Luiz Almeida</span></div>
+    <div class="prof-row"><span class="prof-l">Especialidade</span><span class="prof-v">Clínica Médica</span></div>
+    <div class="prof-row"><span class="prof-l">Objetivo fitness</span><span class="prof-v">Ganho de massa</span></div>
+    <div class="prof-row"><span class="prof-l">Banca inicial</span><span class="prof-v">R$ 50.000</span></div>
+  </div>
+</div>
+
+<!-- TREINO -->
+<div id="treino" class="page">
+  <div class="wk" id="wkGrid"></div>
+  <div id="trContent"></div>
+</div>
+
+<!-- NUTRIÇÃO -->
+<div id="nutri" class="page">
+  <div class="card bt-orange">
+    <div class="ct">Meta diária — Luiz</div>
+    <div style="text-align:center;padding:6px 0"><div style="font-size:30px;font-weight:700;background:linear-gradient(90deg,#9e6a03,#d29922);-webkit-background-clip:text;-webkit-text-fill-color:transparent">2.800 kcal</div></div>
+    <div class="g3"><div class="mac"><div class="mv bl">180g</div><div class="ml">Proteína</div></div><div class="mac"><div class="mv or">350g</div><div class="ml">Carboidrato</div></div><div class="mac"><div class="mv rd">80g</div><div class="ml">Gordura</div></div></div>
+  </div>
+  <div class="sl">Plano de 6 refeições</div>
+  <div class="card bt-green" id="mealCard"></div>
+  <div class="tip-box"><div class="tip-t">💡 Dica</div><div class="tip-s">Mínimo 30g de proteína por refeição. Carboidratos no café e pré-treino. 3,5L de água/dia.</div></div>
+</div>
+
+<!-- AGENDA -->
+<div id="agenda" class="page">
+  <div class="sl">Nova tarefa</div>
+  <div class="card bt-blue">
+    <label>Título</label><input type="text" id="tk_t" placeholder="Tarefa ou compromisso...">
+    <label>Data/hora</label><input type="datetime-local" id="tk_d">
+    <label>Prioridade</label>
+    <select id="tk_p"><option value="alta">Alta</option><option value="media" selected>Média</option><option value="baixa">Baixa</option></select>
+    <label>Tipo</label>
+    <select id="tk_tp"><option value="tarefa">Tarefa</option><option value="compromisso">Compromisso</option></select>
+    <button class="btn btn-bl" onclick="addTask()">Adicionar</button>
+  </div>
+  <div class="sl">Pendências</div>
+  <div class="card" id="taskList"><div class="cs" style="text-align:center;padding:10px">Nenhuma tarefa</div></div>
+</div>
+
+<!-- APOSTAS -->
+<div id="apostas" class="page">
+  <div class="card bt-green">
+    <div class="ct">Banca atual</div>
+    <div class="banca-big" id="b_disp">R$ 50.000,00</div>
+    <div class="g2" style="margin-top:10px;margin-bottom:0">
+      <div class="sc"><div class="sn gr" id="b_w">0</div><div class="sl2">Vitórias</div></div>
+      <div class="sc"><div class="sn" style="color:#f85149" id="b_l">0</div><div class="sl2">Derrotas</div></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:12px"><span class="cs">ROI</span><span id="b_roi" style="font-weight:700;color:#3fb950">0,00%</span></div>
+  </div>
+  <div class="sl">Registrar aposta</div>
+  <div class="card bt-blue">
+    <label>Jogo</label><input type="text" id="bt_j" placeholder="Ex: Flamengo x Palmeiras">
+    <label>Liga</label><input type="text" id="bt_lg" placeholder="Ex: Brasileirão A">
+    <label>Mercado</label><input type="text" id="bt_m" placeholder="Ex: Over 2.5 gols">
+    <label>Casa</label><select id="bt_c"><option>Bet365</option><option>Betano</option><option>Superbet</option></select>
+    <div class="g2"><div><label>Odd</label><input type="number" id="bt_o" placeholder="2.10" step="0.01"></div><div><label>Edge (%)</label><input type="number" id="bt_e" placeholder="8.5" step="0.1"></div></div>
+    <label>Valor (R$)</label><input type="number" id="bt_v" placeholder="1000" step="100">
+    <button class="btn btn-bl" onclick="addBet()">Registrar aposta</button>
+  </div>
+  <div class="card bt-red" style="padding:12px">
+    <div class="ct" style="margin-bottom:8px">Regras</div>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#e6edf3">
+      <div>🛑 Nenhuma aposta sem edge calculado</div>
+      <div>🛑 Máximo 3 apostas/dia · Stop diário R$3k · Stop semanal R$8k</div>
+      <div>🛑 Nunca perseguir prejuízo · Edge mínimo 5%</div>
+    </div>
+  </div>
+  <div class="sl">Histórico</div>
+  <div class="card" id="betList"><div class="cs" style="text-align:center;padding:10px">Nenhuma aposta</div></div>
+</div>
+
+<!-- PROGRESSO -->
+<div id="progresso" class="page">
+  <div class="sl">Registrar medidas</div>
+  <div class="card bt-blue">
+    <label>Peso (kg)</label><input type="number" id="pg_w" placeholder="85.5" step="0.1">
+    <div class="g2"><div><label>Peito (cm)</label><input type="number" id="pg_c" placeholder="100"></div><div><label>Braço (cm)</label><input type="number" id="pg_a" placeholder="36"></div></div>
+    <div class="g2"><div><label>Cintura (cm)</label><input type="number" id="pg_wa" placeholder="88"></div><div><label>Quadril (cm)</label><input type="number" id="pg_h" placeholder="96"></div></div>
+    <label>Observações</label><textarea id="pg_n" placeholder="Como foi? Disposição, energia..." style="height:60px"></textarea>
+    <button class="btn btn-gr" onclick="saveProgress()">Salvar</button>
+  </div>
+  <div class="sl">Histórico</div>
+  <div id="pgList"></div>
+</div>
+
+<!-- EVOLUÇÃO MÉDICA -->
+<div id="evolucao" class="page">
+  <div class="ps">
+    <button class="ps-btn active" onclick="showEv('evol',this)">Evolução diária</button>
+    <button class="ps-btn" onclick="showEv('admissao',this)">Admissão</button>
+    <button class="ps-btn" onclick="showEv('evhist',this)">Histórico</button>
+  </div>
+
+  <!-- EVOLUÇÃO DIÁRIA -->
+  <div id="ev_evol">
+    <div class="sl">Paciente</div>
+    <div id="evPacSel" class="card" style="border-color:#58a6ff;cursor:pointer" onclick="showPacPicker('evol')">
+      <div class="cs" style="text-align:center">Toque para selecionar paciente</div>
+    </div>
+    <div class="sl">Voz</div>
+    <div class="card">
+      <div style="display:flex;justify-content:center"><button class="mic-btn mic-idle" id="mic1" onclick="toggleMic(1)">🎤</button></div>
+      <div class="mic-status" id="mst1">Toque para gravar</div>
+      <div class="voice-box" id="vt1"></div>
+      <div class="sc-sh">
+        <div class="sh" onclick="addSh(1,'Sem queixas, passou bem')">Sem queixas</div>
+        <div class="sh" onclick="addSh(1,'Diurese espontânea')">Diurese OK</div>
+        <div class="sh" onclick="addSh(1,'Dejeções habituais')">Dejeções OK</div>
+        <div class="sh" onclick="addSh(1,'PA controlada')">PA OK</div>
+        <div class="sh" onclick="addSh(1,'Hemodinamicamente estável')">Estável</div>
+        <div class="sh" onclick="addSh(1,'Glicemias controladas')">Glicemia OK</div>
+      </div>
+    </div>
+    <div class="sl">Sinais vitais</div>
+    <div class="card">
+      <div class="vit-g">
+        <div><label>PA (mmHg)</label><input type="text" id="e_pa" placeholder="130/80"></div>
+        <div><label>FC (bpm)</label><input type="number" id="e_fc" placeholder="78"></div>
+        <div><label>FR (irpm)</label><input type="number" id="e_fr" placeholder="18"></div>
+        <div><label>Tax (°C)</label><input type="number" id="e_tax" placeholder="36.5" step="0.1"></div>
+        <div><label>SpO2 (%)</label><input type="number" id="e_spo2" placeholder="98"></div>
+        <div><label>HGT (mg/dL)</label><input type="number" id="e_hgt" placeholder="120"></div>
+      </div>
+    </div>
+    <div class="sl">Laboratório</div>
+    <div class="card">
+      <label>Data</label><input type="date" id="e_ld">
+      <div class="vit-g">
+        <div><label>Leucócitos</label><input type="text" id="e_lt" placeholder="8.500"></div>
+        <div><label>Hb</label><input type="text" id="e_hb" placeholder="12.5"></div>
+        <div><label>Ht (%)</label><input type="text" id="e_ht" placeholder="38"></div>
+        <div><label>Plaquetas (mil)</label><input type="text" id="e_pl" placeholder="250"></div>
+        <div><label>PCR</label><input type="text" id="e_pcr" placeholder="2.4"></div>
+        <div><label>Ureia</label><input type="text" id="e_ur" placeholder="35"></div>
+        <div><label>Creatinina</label><input type="text" id="e_cr" placeholder="0.9"></div>
+        <div><label>Sódio</label><input type="text" id="e_na" placeholder="138"></div>
+        <div><label>Potássio</label><input type="text" id="e_k" placeholder="4.1"></div>
+      </div>
+    </div>
+    <div class="sl">Conduta</div>
+    <div class="card">
+      <label>Condutas (uma por linha)</label><textarea id="e_cond" rows="3" placeholder="Manter hidratação venosa&#10;Antibioticoterapia..."></textarea>
+      <div class="g2"><div><label>Alta prevista</label><input type="date" id="e_alta"></div><div><label>Plantão</label><select id="e_plt"><option>diurno</option><option>noturno</option></select></div></div>
+      <label>Pendências</label><input type="text" id="e_pend" placeholder="Aguardar resultado...">
+    </div>
+    <button class="btn btn-bl" onclick="gerarEv()">Gerar evolução com IA</button>
+    <div id="ev_load" style="display:none"><div class="ai-load"><div class="spin"></div>Gerando com IA...</div></div>
+    <div id="ev_out" style="display:none">
+      <div class="sl">Evolução gerada</div>
+      <div class="out-box" id="ev_txt"></div>
+      <button class="copy-btn" id="ev_cp" onclick="cpTxt('ev_txt','ev_cp')">Copiar texto</button>
+      <button class="btn btn-gy" style="margin-top:6px" onclick="saveEv('evol')">Salvar no histórico</button>
+    </div>
+  </div>
+
+  <!-- ADMISSÃO -->
+  <div id="ev_admissao" style="display:none">
+    <div class="sl">Paciente</div>
+    <div id="admPacSel" class="card" style="border-color:#f85149;cursor:pointer" onclick="showPacPicker('adm')">
+      <div class="cs" style="text-align:center">Toque para selecionar paciente</div>
+    </div>
+    <div class="sl">Voz — história clínica</div>
+    <div class="card">
+      <div style="display:flex;justify-content:center"><button class="mic-btn mic-idle" id="mic2" onclick="toggleMic(2)">🎤</button></div>
+      <div class="mic-status" id="mst2">Toque para gravar</div>
+      <div class="voice-box" id="vt2"></div>
+    </div>
+    <div class="sl">HMP</div>
+    <div class="card">
+      <label>HDA</label><textarea id="a_hda" rows="3" placeholder="Paciente relata..."></textarea>
+      <label>Patologias prévias</label><input type="text" id="a_pat" placeholder="HAS, DM2...">
+      <div class="g2">
+        <div><label>Tabagismo</label><select id="a_tab"><option>Não tabagista</option><option>Tabagista</option><option>Ex-tabagista</option></select></div>
+        <div><label>Etilismo</label><select id="a_etil"><option>Não etilista</option><option>Etilista</option><option>Ex-etilista</option></select></div>
+      </div>
+      <label>Cirurgias prévias</label><input type="text" id="a_cir" placeholder="Nega / Apendicectomia 2010">
+      <label>Alergias</label><input type="text" id="a_alg" placeholder="NKDA / Dipirona">
+      <label>Medicações de uso</label><textarea id="a_med" rows="2" placeholder="Enalapril 10mg..."></textarea>
+    </div>
+    <div class="sl">Vitais admissão</div>
+    <div class="card">
+      <div class="vit-g">
+        <div><label>PA</label><input type="text" id="a_pa" placeholder="160/100"></div>
+        <div><label>FC</label><input type="number" id="a_fc" placeholder="92"></div>
+        <div><label>FR</label><input type="number" id="a_fr" placeholder="20"></div>
+        <div><label>Tax</label><input type="number" id="a_tax" placeholder="37.8" step="0.1"></div>
+        <div><label>SpO2</label><input type="number" id="a_spo2" placeholder="96"></div>
+        <div><label>HGT</label><input type="number" id="a_hgt" placeholder="250"></div>
+      </div>
+    </div>
+    <div class="sl">Problemas e conduta</div>
+    <div class="card">
+      <label>Problemas</label><textarea id="a_prob" rows="3" placeholder="1. HAS descompensada&#10;2. Hiperglicemia"></textarea>
+      <label>Condutas iniciais</label><textarea id="a_cond" rows="3" placeholder="Hidratação IV&#10;Anti-hipertensivo..."></textarea>
+      <div class="g2"><div><label>Plantão</label><select id="a_plt"><option>diurno</option><option>noturno</option></select></div><div></div></div>
+    </div>
+    <button class="btn btn-rd" onclick="gerarAdm()">Gerar admissão com IA</button>
+    <div id="adm_load" style="display:none"><div class="ai-load"><div class="spin"></div>Gerando com IA...</div></div>
+    <div id="adm_out" style="display:none">
+      <div class="sl">Nota gerada</div>
+      <div class="out-box" id="adm_txt"></div>
+      <button class="copy-btn" id="adm_cp" onclick="cpTxt('adm_txt','adm_cp')">Copiar texto</button>
+      <button class="btn btn-gy" style="margin-top:6px" onclick="saveEv('adm')">Salvar no histórico</button>
+    </div>
+  </div>
+
+  <!-- HISTÓRICO EVOLUÇÕES -->
+  <div id="ev_evhist" style="display:none">
+    <div class="sl">Pacientes cadastrados</div>
+    <div class="card bt-green">
+      <label>Nome</label><input type="text" id="pnome" placeholder="Nome completo">
+      <div class="g2"><div><label>Idade</label><input type="number" id="pidade" placeholder="65"></div><div><label>Leito</label><input type="text" id="pleito" placeholder="Leito 3"></div></div>
+      <label>Sala</label>
+      <select id="psala">
+        <option value="med">Sala de medicação</option>
+        <option value="curta">Sala de curta permanência</option>
+        <option value="esp">Sala de especialidades</option>
+        <option value="estab">Sala de estabilização</option>
+      </select>
+      <label>Diagnóstico</label><input type="text" id="pdiag" placeholder="HAS descompensada">
+      <button class="btn btn-gr" onclick="addPac()">Adicionar paciente</button>
+    </div>
+    <div class="sl">Evoluções salvas</div>
+    <div id="evHistList"><div class="cs" style="text-align:center;padding:10px">Nenhuma evolução salva</div></div>
+  </div>
+
+  <!-- PICKER DE PACIENTE -->
+  <div id="pacPicker" style="display:none">
+    <div class="sl">Selecionar paciente</div>
+    <div id="pacPickerList"></div>
+    <button class="btn btn-gy" onclick="hidePacPicker()">Cancelar</button>
+  </div>
+</div>
+
+<!-- CLÍNICA -->
+<div id="clinica_old" class="page">
+  <div class="sc3" id="clinTabs">
+    <button class="sc3-btn active" onclick="showClin('calc',this)">Calculadoras</button>
+    <button class="sc3-btn" onclick="showClin('escores',this)">Escores</button>
+    <button class="sc3-btn" onclick="showClin('protos',this)">Protocolos</button>
+  </div>
+
+  <div id="clin_calc">
+    <div class="card bt-blue">
+      <div class="ct">IMC</div>
+      <div class="g2"><div><label>Peso (kg)</label><input type="number" id="imc_p" placeholder="85" step="0.1" oninput="cIMC()"></div><div><label>Altura (m)</label><input type="number" id="imc_a" placeholder="1.70" step="0.01" oninput="cIMC()"></div></div>
+      <div class="rb" id="imc_r" style="display:none"><div class="rv" id="imc_v"></div><div class="rl">kg/m²</div><div class="ri" id="imc_i"></div></div>
+    </div>
+    <div class="card bt-green">
+      <div class="ct">Cockcroft-Gault — ClCr</div>
+      <div class="g2"><div><label>Idade</label><input type="number" id="cg_id" placeholder="65" oninput="cCG()"></div><div><label>Peso (kg)</label><input type="number" id="cg_p" placeholder="70" oninput="cCG()"></div></div>
+      <div class="g2"><div><label>Creatinina</label><input type="number" id="cg_cr" placeholder="1.2" step="0.1" oninput="cCG()"></div><div><label>Sexo</label><select id="cg_sx" onchange="cCG()"><option value="M">Masculino</option><option value="F">Feminino</option></select></div></div>
+      <div class="rb" id="cg_r" style="display:none"><div class="rv" id="cg_v"></div><div class="rl">mL/min</div><div class="ri" id="cg_i"></div></div>
+    </div>
+    <div class="card bt-orange">
+      <div class="ct">Osmolaridade sérica</div>
+      <div class="g2"><div><label>Sódio (mEq/L)</label><input type="number" id="osm_na" placeholder="138" oninput="cOsm()"></div><div><label>Glicose (mg/dL)</label><input type="number" id="osm_gl" placeholder="100" oninput="cOsm()"></div></div>
+      <label>Ureia (mg/dL)</label><input type="number" id="osm_ur" placeholder="40" oninput="cOsm()">
+      <div class="rb" id="osm_r" style="display:none"><div class="rv" id="osm_v"></div><div class="rl">mOsm/kg</div><div class="ri" id="osm_i"></div></div>
+    </div>
+    <div class="card bt-purple">
+      <div class="ct">Déficit de sódio</div>
+      <div class="g2"><div><label>Na atual</label><input type="number" id="na_a" placeholder="125" oninput="cNa()"></div><div><label>Na desejado</label><input type="number" id="na_d" placeholder="135" oninput="cNa()"></div></div>
+      <div class="g2"><div><label>Peso (kg)</label><input type="number" id="na_p" placeholder="70" oninput="cNa()"></div><div><label>Sexo</label><select id="na_sx" onchange="cNa()"><option value="M">Masculino</option><option value="F">Feminino</option></select></div></div>
+      <div class="rb" id="na_r" style="display:none"><div class="rv" id="na_v"></div><div class="rl">mEq de Na a repor</div><div class="ri" id="na_i"></div></div>
+    </div>
+    <div class="card bt-red">
+      <div class="ct">Insulina — correção</div>
+      <label>Glicemia (mg/dL)</label><input type="number" id="ins_g" placeholder="250" oninput="cIns()">
+      <label>Fator de sensibilidade</label><select id="ins_f" onchange="cIns()"><option value="50">50 — sensível</option><option value="40" selected>40 — padrão</option><option value="30">30 — resistente</option></select>
+      <div class="rb" id="ins_r" style="display:none"><div class="rv" id="ins_v"></div><div class="rl">UI insulina regular SC</div><div class="ri" id="ins_i"></div></div>
+    </div>
+  </div>
+
+  <div id="clin_escores" style="display:none">
+    <div class="card bt-blue"><div class="ct">CURB-65 — Pneumonia</div><div id="curb_it"></div><div class="rb"><div class="sc-tot" id="curb_tot">0</div><div class="rl">pontos</div><div class="ri" id="curb_ri"></div><div class="rk" id="curb_rk"></div></div></div>
+    <div class="card bt-orange"><div class="ct">Wells — TEP</div><div id="wells_it"></div><div class="rb"><div class="sc-tot" id="wells_tot">0</div><div class="rl">pontos</div><div class="ri" id="wells_ri"></div><div class="rk" id="wells_rk"></div></div></div>
+    <div class="card bt-purple"><div class="ct">CHADS₂-VASc — FA</div><div id="chads_it"></div><div class="rb"><div class="sc-tot" id="chads_tot">0</div><div class="rl">pontos</div><div class="ri" id="chads_ri"></div><div class="rk" id="chads_rk"></div></div></div>
+    <div class="card bt-green"><div class="ct">SOFA Score</div><div id="sofa_it"></div><div class="rb"><div class="sc-tot" id="sofa_tot">0</div><div class="rl">pontos</div><div class="ri" id="sofa_ri"></div></div></div>
+  </div>
+
+  <div id="clin_protos" style="display:none">
+    <div class="card bt-red"><div class="ct">Sepse — Bundle 1h</div><div id="prot_sep"></div></div>
+    <div class="card bt-blue"><div class="ct">AVC Isquêmico — rt-PA</div><div id="prot_avc"></div></div>
+    <div class="card bt-orange"><div class="ct">Crise Hipertensiva</div><div id="prot_has"></div></div>
+    <div class="card bt-green"><div class="ct">Cetoacidose Diabética</div><div id="prot_cad"></div></div>
+  </div>
+</div>
+
+<!-- URGÊNCIA — DROGAS VASOATIVAS -->
+<div id="urgencia" class="page">
+  <div class="card" style="background:#1a0808;border-color:#f85149;margin-bottom:14px">
+    <div style="font-size:12px;font-weight:700;color:#f85149;margin-bottom:4px">⚠ Atenção</div>
+    <div class="cs">Informe o peso para calcular as doses. Confirme com protocolo institucional.</div>
+    <label>Peso do paciente (kg)</label><input type="number" id="urg_peso" placeholder="70" oninput="calcAll()">
+  </div>
+
+  <div class="card bt-red"><div class="drug-n">Noradrenalina</div><div class="drug-c">4mg/250mL SG5% = 16 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="nor_d" placeholder="0.1" step="0.05" oninput="cNor()"><div class="drug-r" id="nor_r" style="display:none"><div class="dr-v" id="nor_v"></div><div class="dr-l">mL/hora</div><div class="cs" id="nor_m" style="text-align:center;margin-top:4px"></div></div><div class="cs" style="margin-top:8px;font-size:11px">0,01–3 mcg/kg/min · 1ª linha choque séptico</div></div>
+
+  <div class="card bt-orange"><div class="drug-n">Dopamina</div><div class="drug-c">200mg/250mL SG5% = 800 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="dop_d" placeholder="5" step="1" oninput="cDop()"><div class="drug-r" id="dop_r" style="display:none"><div class="dr-v" id="dop_v"></div><div class="dr-l">mL/hora</div><div class="cs" id="dop_m" style="text-align:center;margin-top:4px"></div></div><div class="cs" style="margin-top:8px;font-size:11px">≤5 renal · 5-10 inotrópico · >10 vasoconstritor</div></div>
+
+  <div class="card bt-blue"><div class="drug-n">Dobutamina</div><div class="drug-c">250mg/250mL SG5% = 1000 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="dob_d" placeholder="5" step="1" oninput="cDob()"><div class="drug-r" id="dob_r" style="display:none"><div class="dr-v" id="dob_v"></div><div class="dr-l">mL/hora</div><div class="cs" id="dob_m" style="text-align:center;margin-top:4px"></div></div><div class="cs" style="margin-top:8px;font-size:11px">2,5–20 mcg/kg/min · Choque cardiogênico</div></div>
+
+  <div class="card bt-purple"><div class="drug-n">Adrenalina</div><div class="drug-c">4mg/250mL SG5% = 16 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="adr_d" placeholder="0.1" step="0.05" oninput="cAdr()"><div class="drug-r" id="adr_r" style="display:none"><div class="dr-v" id="adr_v"></div><div class="dr-l">mL/hora</div><div class="cs" id="adr_m" style="text-align:center;margin-top:4px"></div></div><div class="cs" style="margin-top:8px;font-size:11px">PCR: 1mg IV a cada 3-5min</div></div>
+
+  <div class="card bt-green"><div class="drug-n">Vasopressina</div><div class="drug-c">20UI/100mL SG5% = 0,2 UI/mL · Dose fixa</div><label>Dose (UI/min)</label><select id="vas_d" onchange="cVas()"><option value="0.01">0,01 UI/min</option><option value="0.02">0,02 UI/min</option><option value="0.03" selected>0,03 UI/min</option><option value="0.04">0,04 UI/min</option></select><div class="drug-r" id="vas_r"><div class="dr-v" id="vas_v">9 mL/h</div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">2ª linha choque séptico · Não titular</div></div>
+
+  <div class="card"><div class="drug-n">Nitroglicerina</div><div class="drug-c">25mg/250mL SG5% = 100 mcg/mL</div><label>Dose (mcg/min)</label><input type="number" id="nit_d" placeholder="10" step="5" oninput="cNit()"><div class="drug-r" id="nit_r" style="display:none"><div class="dr-v" id="nit_v"></div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">Início 5-10 mcg/min · Máx 200 · SCA, EAP, crise HAS</div></div>
+
+  <div class="card"><div class="drug-n">Nitroprussiato</div><div class="drug-c">50mg/250mL SG5% = 200 mcg/mL · Proteger da luz</div><label>Dose (mcg/kg/min)</label><input type="number" id="ntp_d" placeholder="0.5" step="0.25" oninput="cNtp()"><div class="drug-r" id="ntp_r" style="display:none"><div class="dr-v" id="ntp_v"></div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">Início 0,3 · Máx 10 mcg/kg/min · Risco cianeto</div></div>
+
+  <div class="card bt-orange"><div class="drug-n">Amiodarona</div><div class="drug-c">450mg/250mL SG5% = 1,8 mg/mL (manutenção)</div><div class="cs" style="margin:6px 0">Ataque: 150mg em 10min · Manutenção: 1mg/min 6h → 0,5mg/min 18h</div><label>Fase</label><select id="ami_f" onchange="cAmi()"><option value="1">1ª fase — 1 mg/min (6h)</option><option value="0.5">2ª fase — 0,5 mg/min (18h)</option></select><div class="drug-r" id="ami_r"><div class="dr-v" id="ami_v">33 mL/h</div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">FA RVR · TV sem pulso · Dose total 24h: máx 2,2g</div></div>
+</div>
+
+
+<!-- CLÍNICA MÉDICA -->
+<div id="clinica" class="page">
+  <div id="cl_lista">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div><div class="section-title">Meus pacientes</div><div class="subtitle" id="pac_count">0 pacientes ativos</div></div>
+      <button class="btn-primary" onclick="showCl('novo')" style="padding:8px 16px;font-size:13px">+ Novo</button>
+    </div>
+    <div id="pacList"></div>
+  </div>
+  <div id="cl_novo" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="section-title">Novo paciente</div>
+      <button onclick="showCl('lista')" style="background:none;border:none;color:#58a6ff;cursor:pointer;font-size:14px">← Voltar</button>
+    </div>
+    <div class="card">
+      <label class="form-label">Nome completo</label>
+      <input type="text" id="pn_nome" class="form-input" placeholder="Nome do paciente">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div><label class="form-label">Leito</label><input type="text" id="pn_leito" class="form-input" placeholder="Ex: 17B"></div>
+        <div><label class="form-label">Prontuário</label><input type="text" id="pn_pront" class="form-input" placeholder="Nº prontuário"></div>
+      </div>
+      <label class="form-label">Problemas / Diagnósticos</label>
+      <textarea id="pn_diag" class="form-input" rows="3" placeholder="- PO amputação&#10;- Pé diabético"></textarea>
+      <label class="form-label">Patologias prévias</label>
+      <input type="text" id="pn_hmp" class="form-input" placeholder="HAS, DM...">
+      <label class="form-label">Cirurgias prévias</label>
+      <input type="text" id="pn_cir" class="form-input" placeholder="Nega ou listar">
+      <label class="form-label">Alergias</label>
+      <input type="text" id="pn_alg" class="form-input" placeholder="NKDA ou listar">
+      <label class="form-label">Hábitos</label>
+      <input type="text" id="pn_hab" class="form-input" placeholder="Nega etilismo e tabagismo">
+      <label class="form-label">Medicações de uso prévio</label>
+      <textarea id="pn_med" class="form-input" rows="2" placeholder="Losartana / AAS..."></textarea>
+      <label class="form-label">Evolução do internamento</label>
+      <textarea id="pn_evint" class="form-input" rows="4" placeholder="Paciente deu entrada em..."></textarea>
+      <label class="form-label">Previsão de alta</label>
+      <input type="text" id="pn_alta" class="form-input" placeholder="xx/xx/2026">
+      <label class="form-label">Data de admissão</label>
+      <input type="date" id="pn_dtadm" class="form-input">
+      <button class="btn-primary" onclick="addPac()" style="margin-top:12px;width:100%;padding:12px">Cadastrar paciente</button>
+    </div>
+  </div>
+  <div id="cl_prontuario" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="section-title" id="pr_titulo">Paciente</div>
+      <button onclick="showCl('lista')" style="background:none;border:none;color:#58a6ff;cursor:pointer;font-size:14px">← Voltar</button>
+    </div>
+    <div class="card" style="border-left:3px solid #1f6feb">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div class="section-title" style="font-size:13px">📋 Evolução de hoje</div>
+        <button onclick="copiarEvolucao()" style="background:#1f6feb;color:#fff;border:none;border-radius:8px;padding:6px 16px;font-size:12px;font-weight:600;cursor:pointer">Copiar</button>
+      </div>
+      <div id="ev_preview" style="font-size:12px;line-height:1.8;color:#e6edf3;white-space:pre-wrap;font-family:monospace;max-height:350px;overflow-y:auto"></div>
+    </div>
+    <div class="card" style="border-left:3px solid #d29922">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="section-title">🎤 Atualizar evolução</div>
+        <button onclick="carregarRascunhoApp()" style="background:rgba(63,185,80,0.15);color:#3fb950;border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer">📲 Carregar do celular</button>
+      </div>
+      <p style="font-size:12px;color:#8b949e;margin-bottom:10px">Dite intercorrências. O restante preencha abaixo.</p>
+      <div style="display:flex;justify-content:center;margin-bottom:6px">
+        <button id="mic_ev" onclick="togMic()" style="width:60px;height:60px;border-radius:50%;background:rgba(31,111,235,0.2);border:2px solid #1f6feb;font-size:24px;cursor:pointer">🎤</button>
+      </div>
+      <div id="mic_st" style="text-align:center;font-size:12px;color:#8b949e;margin-bottom:8px">Toque para gravar</div>
+      <div id="vbox_ev" style="min-height:30px;font-size:13px;color:#3fb950;margin-bottom:8px;padding:8px;background:rgba(63,185,80,0.05);border-radius:6px"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+        <button onclick="addSh('Sem queixas, passou bem')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:11px;color:#e6edf3;cursor:pointer">Sem queixas</button>
+        <button onclick="addSh('Diurese espontânea')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:11px;color:#e6edf3;cursor:pointer">Diurese OK</button>
+        <button onclick="addSh('Dejeções fisiológicas')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:11px;color:#e6edf3;cursor:pointer">Dejeções OK</button>
+        <button onclick="addSh('Hemodinamicamente estável, sem DVA ou O2 suplementar')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:11px;color:#e6edf3;cursor:pointer">Estável</button>
+        <button onclick="addSh('Sem intercorrências no período')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:11px;color:#e6edf3;cursor:pointer">Sem intercorrências</button>
+        <button onclick="addSh('Dieta VO com boa aceitação')" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:11px;color:#e6edf3;cursor:pointer">Dieta OK</button>
+      </div>
+      <label class="form-label">Sinais vitais</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <input type="text" id="ev_pa" class="form-input" placeholder="PA: 130x80">
+        <input type="text" id="ev_fc" class="form-input" placeholder="FC: 75bpm">
+        <input type="text" id="ev_fr" class="form-input" placeholder="FR: 16irpm">
+        <input type="text" id="ev_spo2" class="form-input" placeholder="SpO2: 98%AA">
+      </div>
+      <input type="text" id="ev_hgt" class="form-input" placeholder="HGT (opcional): 174 mg/dL" style="margin-bottom:8px">
+      <label class="form-label">Exames (cole o resultado bruto)</label>
+      <textarea id="ev_exames_brutos" class="form-input" rows="4" placeholder="Cole aqui o resultado do laboratório ou exames de imagem."></textarea>
+      <label class="form-label" style="margin-top:8px">Condutas</label>
+      <textarea id="ev_cond" class="form-input" rows="3" placeholder="Manter ATB&#10;Controle glicêmico&#10;Alta prevista: xx/xx/2026"></textarea>
+      <label class="form-label" style="margin-top:8px">Previsão de alta</label>
+      <input type="text" id="ev_alta" class="form-input" placeholder="xx/xx/2026">
+      <button onclick="gerarEv()" style="width:100%;padding:12px;background:#1f6feb;color:#fff;border:none;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;margin-top:8px">✨ Gerar evolução</button>
+      <button onclick="salvarRascunhoApp()" style="width:100%;padding:12px;background:rgba(110,64,201,0.2);color:#bc8cff;border:1px solid rgba(188,140,255,0.3);border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;margin-top:6px">💾 Salvar rascunho (celular → computador)</button>
+    </div>
+    <div id="ev_out" style="display:none">
+      <div class="card" style="border-left:3px solid #3fb950">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div class="section-title" style="font-size:13px">✅ Evolução gerada</div>
+          <button onclick="cpEv()" style="background:rgba(63,185,80,0.2);color:#3fb950;border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer">Copiar</button>
+        </div>
+        <div id="ev_txt" style="font-size:12px;line-height:1.8;color:#e6edf3;white-space:pre-wrap;font-family:monospace"></div>
+      </div>
+      <button onclick="saveEv()" style="width:100%;padding:12px;background:#3fb950;color:#fff;border:none;border-radius:8px;font-weight:600;font-size:14px;cursor:pointer;margin-top:8px">✅ Salvar e atualizar evolução</button>
+    </div>
+    <div class="card" style="border-left:3px solid #f85149;margin-top:8px">
+      <div class="section-title" style="margin-bottom:8px;font-size:13px">Alta / Transferência / Óbito</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button onclick="encerrarPac('alta')" style="padding:10px;background:rgba(158,106,3,0.2);color:#d29922;border:1px solid rgba(210,153,34,0.3);border-radius:8px;font-weight:600;cursor:pointer">Alta hospitalar</button>
+        <button onclick="encerrarPac('obito')" style="padding:10px;background:rgba(184,24,24,0.2);color:#f85149;border:1px solid rgba(248,81,73,0.3);border-radius:8px;font-weight:600;cursor:pointer">Óbito</button>
+      </div>
+      <button onclick="encerrarPac('transferencia')" style="width:100%;padding:10px;background:rgba(110,64,201,0.2);color:#bc8cff;border:1px solid rgba(188,140,255,0.3);border-radius:8px;font-weight:600;cursor:pointer;margin-top:8px">Transferência</button>
+    </div>
+  </div>
+</div>
+
+<!-- FERRAMENTAS -->
+<div id="ferramentas" class="page">
+  <div class="tabs3">
+    <button class="t3 active" onclick="showFerr('calc',this)">Calculadoras</button>
+    <button class="t3" onclick="showFerr('escores',this)">Escores</button>
+    <button class="t3" onclick="showFerr('protos',this)">Protocolos</button>
+  </div>
+  <div style="display:flex;gap:4px;margin-bottom:14px">
+    <button class="t3 active" id="ft4" onclick="showFerr('drogas',this)" style="background:transparent;color:#8b949e;border:1px solid #30363d;border-radius:8px;padding:8px;font-size:11px;font-weight:600;cursor:pointer;flex:1">Drogas</button>
+  </div>
+
+  <!-- CALCULADORAS -->
+  <div id="ferr_calc">
+    <div class="card bt bt-bl"><div class="ct">IMC</div><div class="g2"><div><label>Peso (kg)</label><input type="number" id="imc_p" placeholder="85" step="0.1" oninput="cIMC()"></div><div><label>Altura (m)</label><input type="number" id="imc_a" placeholder="1.70" step="0.01" oninput="cIMC()"></div></div><div class="rb" id="imc_r" style="display:none"><div class="rv" id="imc_v"></div><div class="rl">kg/m²</div><div class="ri" id="imc_i"></div></div></div>
+    <div class="card bt bt-gr"><div class="ct">Cockcroft-Gault — ClCr</div><div class="g2"><div><label>Idade</label><input type="number" id="cg_id" placeholder="65" oninput="cCG()"></div><div><label>Peso (kg)</label><input type="number" id="cg_p" placeholder="70" oninput="cCG()"></div></div><div class="g2"><div><label>Creatinina</label><input type="number" id="cg_cr" placeholder="1.2" step="0.1" oninput="cCG()"></div><div><label>Sexo</label><select id="cg_sx" onchange="cCG()"><option value="M">Masculino</option><option value="F">Feminino</option></select></div></div><div class="rb" id="cg_r" style="display:none"><div class="rv" id="cg_v"></div><div class="rl">mL/min</div><div class="ri" id="cg_i"></div></div></div>
+    <div class="card bt bt-or"><div class="ct">Osmolaridade sérica</div><div class="g2"><div><label>Sódio</label><input type="number" id="osm_na" placeholder="138" oninput="cOsm()"></div><div><label>Glicose</label><input type="number" id="osm_gl" placeholder="100" oninput="cOsm()"></div></div><label>Ureia</label><input type="number" id="osm_ur" placeholder="40" oninput="cOsm()"><div class="rb" id="osm_r" style="display:none"><div class="rv" id="osm_v"></div><div class="rl">mOsm/kg</div><div class="ri" id="osm_i"></div></div></div>
+    <div class="card bt bt-pu"><div class="ct">Déficit de sódio</div><div class="g2"><div><label>Na atual</label><input type="number" id="na_a" placeholder="125" oninput="cNa()"></div><div><label>Na desejado</label><input type="number" id="na_d" placeholder="135" oninput="cNa()"></div></div><div class="g2"><div><label>Peso (kg)</label><input type="number" id="na_p" placeholder="70" oninput="cNa()"></div><div><label>Sexo</label><select id="na_sx" onchange="cNa()"><option value="M">Masculino</option><option value="F">Feminino</option></select></div></div><div class="rb" id="na_r" style="display:none"><div class="rv" id="na_v"></div><div class="rl">mEq de Na a repor</div><div class="ri" id="na_i"></div></div></div>
+    <div class="card bt bt-rd"><div class="ct">Insulina — correção</div><label>Glicemia (mg/dL)</label><input type="number" id="ins_g" placeholder="250" oninput="cIns()"><label>Fator de sensibilidade</label><select id="ins_f" onchange="cIns()"><option value="50">50 — sensível</option><option value="40" selected>40 — padrão</option><option value="30">30 — resistente</option></select><div class="rb" id="ins_r" style="display:none"><div class="rv" id="ins_v"></div><div class="rl">UI insulina regular SC</div><div class="ri" id="ins_i"></div></div></div>
+  </div>
+
+  <!-- ESCORES -->
+  <div id="ferr_escores" style="display:none">
+    <div class="card bt bt-bl"><div class="ct">CURB-65 — Pneumonia</div><div id="curb_it"></div><div class="rb"><div class="sc-tot" id="curb_tot">0</div><div class="rl">pontos</div><div class="ri" id="curb_ri"></div><div class="rk" id="curb_rk"></div></div></div>
+    <div class="card bt bt-or"><div class="ct">Wells — TEP</div><div id="wells_it"></div><div class="rb"><div class="sc-tot" id="wells_tot">0</div><div class="rl">pontos</div><div class="ri" id="wells_ri"></div><div class="rk" id="wells_rk"></div></div></div>
+    <div class="card bt bt-pu"><div class="ct">CHADS₂-VASc — FA</div><div id="chads_it"></div><div class="rb"><div class="sc-tot" id="chads_tot">0</div><div class="rl">pontos</div><div class="ri" id="chads_ri"></div><div class="rk" id="chads_rk"></div></div></div>
+    <div class="card bt bt-gr"><div class="ct">SOFA Score</div><div id="sofa_it"></div><div class="rb"><div class="sc-tot" id="sofa_tot">0</div><div class="rl">pontos</div><div class="ri" id="sofa_ri"></div></div></div>
+  </div>
+
+  <!-- PROTOCOLOS -->
+  <div id="ferr_protos" style="display:none">
+    <div class="card bt bt-rd"><div class="ct">Sepse — Bundle 1h</div><div id="prot_sep"></div></div>
+    <div class="card bt bt-bl"><div class="ct">AVC Isquêmico — rt-PA</div><div id="prot_avc"></div></div>
+    <div class="card bt bt-or"><div class="ct">Crise Hipertensiva</div><div id="prot_has"></div></div>
+    <div class="card bt bt-gr"><div class="ct">Cetoacidose Diabética</div><div id="prot_cad"></div></div>
+  </div>
+
+  <!-- DROGAS VASOATIVAS -->
+  <div id="ferr_drogas" style="display:none">
+    <div class="card" style="background:#1a0808;border-color:#f85149;margin-bottom:12px"><div style="font-size:12px;font-weight:700;color:#f85149;margin-bottom:4px">⚠ Atenção</div><div class="cs">Confirme com protocolo institucional.</div><label>Peso do paciente (kg)</label><input type="number" id="urg_peso" placeholder="70" oninput="calcAll()"></div>
+    <div class="card bt bt-rd"><div class="drug-n">Noradrenalina</div><div class="drug-c">4mg/250mL SG5% = 16 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="nor_d" placeholder="0.1" step="0.05" oninput="cNor()"><div class="drug-r" id="nor_r" style="display:none"><div class="dr-v" id="nor_v"></div><div class="dr-l">mL/hora</div><div class="cs" id="nor_m" style="text-align:center;margin-top:4px"></div></div><div class="cs" style="margin-top:8px;font-size:11px">0,01–3 mcg/kg/min · 1ª linha choque séptico</div></div>
+    <div class="card bt bt-or"><div class="drug-n">Dopamina</div><div class="drug-c">200mg/250mL SG5% = 800 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="dop_d" placeholder="5" step="1" oninput="cDop()"><div class="drug-r" id="dop_r" style="display:none"><div class="dr-v" id="dop_v"></div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">≤5 renal · 5-10 inotrópico · >10 vasoconstritor</div></div>
+    <div class="card bt bt-bl"><div class="drug-n">Dobutamina</div><div class="drug-c">250mg/250mL SG5% = 1000 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="dob_d" placeholder="5" step="1" oninput="cDob()"><div class="drug-r" id="dob_r" style="display:none"><div class="dr-v" id="dob_v"></div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">2,5–20 mcg/kg/min · Choque cardiogênico</div></div>
+    <div class="card bt bt-pu"><div class="drug-n">Adrenalina</div><div class="drug-c">4mg/250mL SG5% = 16 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="adr_d" placeholder="0.1" step="0.05" oninput="cAdr()"><div class="drug-r" id="adr_r" style="display:none"><div class="dr-v" id="adr_v"></div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">PCR: 1mg IV a cada 3-5min</div></div>
+    <div class="card bt bt-gr"><div class="drug-n">Vasopressina</div><div class="drug-c">20UI/100mL SG5% = 0,2 UI/mL · Dose fixa</div><label>Dose (UI/min)</label><select id="vas_d" onchange="cVas()"><option value="0.01">0,01 UI/min</option><option value="0.02">0,02 UI/min</option><option value="0.03" selected>0,03 UI/min</option><option value="0.04">0,04 UI/min</option></select><div class="drug-r" id="vas_r"><div class="dr-v" id="vas_v">9 mL/h</div><div class="dr-l">mL/hora</div></div></div>
+    <div class="card"><div class="drug-n">Nitroglicerina</div><div class="drug-c">25mg/250mL SG5% = 100 mcg/mL</div><label>Dose (mcg/min)</label><input type="number" id="nit_d" placeholder="10" step="5" oninput="cNit()"><div class="drug-r" id="nit_r" style="display:none"><div class="dr-v" id="nit_v"></div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">Início 5-10 mcg/min · Máx 200 · SCA, EAP</div></div>
+    <div class="card"><div class="drug-n">Nitroprussiato</div><div class="drug-c">50mg/250mL SG5% = 200 mcg/mL</div><label>Dose (mcg/kg/min)</label><input type="number" id="ntp_d" placeholder="0.5" step="0.25" oninput="cNtp()"><div class="drug-r" id="ntp_r" style="display:none"><div class="dr-v" id="ntp_v"></div><div class="dr-l">mL/hora</div></div><div class="cs" style="margin-top:8px;font-size:11px">Início 0,3 · Máx 10 mcg/kg/min · Proteger da luz</div></div>
+    <div class="card bt bt-or"><div class="drug-n">Amiodarona</div><div class="drug-c">450mg/250mL SG5% = 1,8 mg/mL (manutenção)</div><label>Fase</label><select id="ami_f" onchange="cAmi()"><option value="1">1ª fase — 1 mg/min (6h)</option><option value="0.5">2ª fase — 0,5 mg/min (18h)</option></select><div class="drug-r" id="ami_r"><div class="dr-v" id="ami_v">33 mL/h</div><div class="dr-l">mL/hora</div></div></div>
+  </div>
+</div>
+
+<div id="financas" class="page">
+  <div id="fin_lock" style="text-align:center;padding:40px 20px">
+    <div style="font-size:48px;margin-bottom:16px">💰</div>
+    <div class="section-title" style="margin-bottom:8px">Finanças</div>
+    <p style="color:#8b949e;font-size:13px;margin-bottom:20px">Digite o PIN para acessar</p>
+    <input type="password" id="fin_pin" class="form-input" placeholder="PIN" maxlength="4" style="text-align:center;font-size:24px;letter-spacing:8px;width:120px;margin:0 auto 16px">
+    <br>
+    <button onclick="checkPin('fin')" style="background:#1f6feb;color:#fff;border:none;border-radius:8px;padding:10px 32px;font-size:14px;font-weight:600;cursor:pointer">Entrar</button>
+  </div>
+  <div id="fin_content" style="display:none">
+    <div class="section-title" style="margin-bottom:12px">💰 Gastos fixos mensais</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">The Odds API</span><span style="color:#e6edf3;font-weight:600">R$ 170,00</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">API-Football</span><span style="color:#e6edf3;font-weight:600">R$ 150,00</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Claude AI</span><span style="color:#e6edf3;font-weight:600">R$ 500,00</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">CRM-BA (anual ÷ 12)</span><span style="color:#e6edf3;font-weight:600">R$ 81,08</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Spotify Duo</span><span style="color:#e6edf3;font-weight:600">R$ 31,90</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Whitebook</span><span style="color:#e6edf3;font-weight:600">R$ 58,25</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Tim</span><span style="color:#e6edf3;font-weight:600">R$ 144,00</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Parcela terreno</span><span style="color:#e6edf3;font-weight:600">R$ 5.000,00</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Prudential — Seguro de vida</span><span style="color:#e6edf3;font-weight:600">R$ 1.159,22</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Livelo Clube</span><span style="color:#e6edf3;font-weight:600">R$ 44,90</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Amazon Prime</span><span style="color:#e6edf3;font-weight:600">R$ 13,90</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="cs">Supabase</span><span style="color:#3fb950;font-weight:600">Gratuito</span></div>
+      <div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08)">
+        <span style="font-weight:700;color:#e6edf3">Total mensal</span>
+        <span style="font-weight:700;color:#d29922">R$ 7.353,25</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="senhas" class="page">
+  <div id="sen_lock" style="text-align:center;padding:40px 20px">
+    <div style="font-size:48px;margin-bottom:16px">🔐</div>
+    <div class="section-title" style="margin-bottom:8px">Senhas</div>
+    <p style="color:#8b949e;font-size:13px;margin-bottom:20px">Digite o PIN para acessar</p>
+    <input type="password" id="sen_pin" class="form-input" placeholder="PIN" maxlength="4" style="text-align:center;font-size:24px;letter-spacing:8px;width:120px;margin:0 auto 16px">
+    <br>
+    <button onclick="checkPin('sen')" style="background:#1f6feb;color:#fff;border:none;border-radius:8px;padding:10px 32px;font-size:14px;font-weight:600;cursor:pointer">Entrar</button>
+  </div>
+  <div id="sen_content" style="display:none">
+    <div class="section-title" style="margin-bottom:12px">🔐 Minhas senhas</div>
+    <div class="card">
+
+      <div style="margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">The Odds API</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Chave</span><span class="prof-v" style="font-size:10px">d8c720d81b7e7d0616d2d4760bfe3ca9</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">API-Football</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Chave</span><span class="prof-v" style="font-size:10px">153ff9e7811102a1e88e51a8221afa90</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Supabase</div>
+        <div class="prof-row"><span class="prof-l">Site</span><span class="prof-v">supabase.com</span></div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha site</span><span class="prof-v" id="s_sb_pwd" style="cursor:pointer" onclick="togglePwd('s_sb_pwd','Deus@2026@Luiz')">••••••••</span></div>
+        <div class="prof-row"><span class="prof-l">Senha banco</span><span class="prof-v" id="s_sb_db_pwd" style="cursor:pointer" onclick="togglePwd('s_sb_db_pwd','Futebol2026!2')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">GitHub</div>
+        <div class="prof-row"><span class="prof-l">Login</span><span class="prof-v">luizalmeida12</span></div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_gh_pwd" style="cursor:pointer" onclick="togglePwd('s_gh_pwd','Deus.2026')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Claude AI</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_claude_pwd" style="cursor:pointer" onclick="togglePwd('s_claude_pwd','2026.Deus')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Hotmail / Outlook</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_hotmail_pwd" style="cursor:pointer" onclick="togglePwd('s_hotmail_pwd','2026.Deus')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Apple ID</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v" style="font-size:11px">luiz.almeida31031995@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_apple_pwd" style="cursor:pointer" onclick="togglePwd('s_apple_pwd','Deus.2026')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Bet365</div>
+        <div class="prof-row"><span class="prof-l">Login</span><span class="prof-v">almeida6666</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_bet365_pwd" style="cursor:pointer" onclick="togglePwd('s_bet365_pwd','Fudeu.365.')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Betano</div>
+        <div class="prof-row"><span class="prof-l">Login</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_betano_pwd" style="cursor:pointer" onclick="togglePwd('s_betano_pwd','Deus.2026')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Spotify — Plano Duo</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_spot_pwd" style="cursor:pointer" onclick="togglePwd('s_spot_pwd','Deus.2026.')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Whitebook — App Médico</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Prudential</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">CRM-BA</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Livelo — Pontos</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_liv_pwd" style="cursor:pointer" onclick="togglePwd('s_liv_pwd','Henrique.2026')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Steam</div>
+        <div class="prof-row"><span class="prof-l">Login</span><span class="prof-v">luizalmeida12</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_steam_pwd" style="cursor:pointer" onclick="togglePwd('s_steam_pwd','Deus.2026')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Sem Parar</div>
+        <div class="prof-row"><span class="prof-l">Email</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_semparar_pwd" style="cursor:pointer" onclick="togglePwd('s_semparar_pwd','Deus.2026')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">Amazon</div>
+        <div class="prof-row"><span class="prof-l">Login</span><span class="prof-v">luiz.almeida20@hotmail.com</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_amz_pwd" style="cursor:pointer" onclick="togglePwd('s_amz_pwd','2026.Deus')">••••••••</span></div>
+      </div>
+
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px">
+        <div style="font-size:13px;font-weight:700;color:#58a6ff;margin-bottom:6px">League of Legends</div>
+        <div class="prof-row"><span class="prof-l">Login</span><span class="prof-v">luiz678</span></div>
+        <div class="prof-row"><span class="prof-l">Senha</span><span class="prof-v" id="s_lol_pwd" style="cursor:pointer" onclick="togglePwd('s_lol_pwd','Luiz123456')">••••••••</span></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const BANCA0=50000;
+const SALAS={med:"Sala de medicação",curta:"Sala de curta permanência",esp:"Sala de especialidades",estab:"Sala de estabilização"};
+const SCLS={med:"sal-bl",curta:"sal-gr",esp:"sal-or",estab:"sal-rd"};
+const TREINOS={
+  0:{n:"Descanso",t:"rest",ex:[]},
+  1:{n:"Peito + Tríceps",t:"treino",ex:[{n:"Supino reto barra",s:"4×10",m:"Peito"},{n:"Supino inclinado halteres",s:"3×12",m:"Peito superior"},{n:"Crucifixo halteres",s:"3×12",m:"Peito"},{n:"Tríceps polia corda",s:"4×12",m:"Tríceps"},{n:"Tríceps testa barra W",s:"3×10",m:"Tríceps"},{n:"Mergulho paralelas",s:"3×12",m:"Tríceps"}]},
+  2:{n:"Costas + Bíceps",t:"treino",ex:[{n:"Barra fixa",s:"4×8",m:"Costas"},{n:"Remada curvada",s:"4×10",m:"Costas"},{n:"Puxada frontal",s:"3×12",m:"Latíssimo"},{n:"Remada unilateral",s:"3×12",m:"Costas"},{n:"Rosca direta barra",s:"4×12",m:"Bíceps"},{n:"Rosca martelo",s:"3×12",m:"Bíceps"}]},
+  3:{n:"Pernas",t:"treino",ex:[{n:"Agachamento livre",s:"4×10",m:"Quadríceps/Glúteos"},{n:"Leg press 45°",s:"4×12",m:"Quadríceps"},{n:"Cadeira extensora",s:"3×15",m:"Quadríceps"},{n:"Mesa flexora",s:"3×12",m:"Isquiotibiais"},{n:"Stiff halteres",s:"3×12",m:"Posterior"},{n:"Panturrilha máquina",s:"4×20",m:"Panturrilha"}]},
+  4:{n:"Ombros + Abdômen",t:"treino",ex:[{n:"Desenvolvimento halteres",s:"4×10",m:"Deltóide"},{n:"Elevação lateral",s:"3×15",m:"Deltóide lateral"},{n:"Elevação frontal",s:"3×12",m:"Deltóide anterior"},{n:"Encolhimento halteres",s:"3×15",m:"Trapézio"},{n:"Prancha frontal",s:"3×60s",m:"Core"},{n:"Crunch bicicleta",s:"3×20",m:"Abdômen"}]},
+  5:{n:"Full Body + Cardio",t:"treino",ex:[{n:"Agachamento com salto",s:"3×15",m:"Full body"},{n:"Flexão de braço",s:"3×15",m:"Peito/Tríceps"},{n:"Burpee",s:"3×10",m:"Full body"},{n:"Corrida/esteira",s:"20 min",m:"Cardio"},{n:"Abdominal supra",s:"3×20",m:"Abdômen"}]},
+  6:{n:"Descanso",t:"rest",ex:[]},
+};
+const REFS=[
+  {h:"06:30",n:"Café da manhã",k:600,f:"5 ovos + 3 fatias pão integral + 1 banana + café s/ açúcar"},
+  {h:"09:30",n:"Lanche manhã",k:350,f:"200g frango grelhado + 1 maçã + 30g amendoim"},
+  {h:"12:30",n:"Almoço",k:700,f:"180g arroz integral + 250g frango/carne + feijão + salada"},
+  {h:"15:30",n:"Pré-treino",k:450,f:"2 fatias pão integral + pasta amendoim + 1 banana + whey 30g"},
+  {h:"18:30",n:"Pós-treino",k:400,f:"Whey 40g + 1 banana + 60g aveia"},
+  {h:"21:00",n:"Jantar",k:550,f:"250g peixe/frango + batata-doce 200g + legumes no azeite"},
+];
+const DIAS=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const ST={water:0,ex:new Set(),ml:new Set(),selDay:new Date().getDay()};
+let selPac=null,selPacCtx="",rec1=null,rec2=null,isRec1=false,isRec2=false,v1="",v2="";
+
+function G(id){return document.getElementById(id)}
+function get(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch{return null}}
+function set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+function sp(id,btn){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  const pg=G(id);
+  if(pg) pg.classList.add("active");
+  if(btn) btn.classList.add("active");
+  if(id==="clinica") loadPacs();
+  if(id==="financas"||id==="senhas"){
+    const lock=G(id+"_lock");
+    const cont=G(id+"_content");
+    if(lock) lock.style.display="block";
+    if(cont) cont.style.display="none";
+    const pin=G(id==="financas"?"fin_pin":"sen_pin");
+    if(pin) pin.value="";
+  }
+}
+
+function updHeader(){
+  const o={weekday:"long",day:"numeric",month:"long"};
+  G("hdate").textContent=new Date().toLocaleDateString("pt-BR",o);
+}
+
+function buildWater(){
+  const g=G("wGrid");g.innerHTML="";
+  for(let i=0;i<8;i++){
+    const d=document.createElement("div");
+    d.className="wc"+(i<ST.water?" ok":"");
+    d.textContent=i<ST.water?"💧":"○";
+    d.onclick=()=>{ST.water=i<ST.water?i:i+1;buildWater();G("h_wc").textContent=ST.water;G("s_wt").textContent=ST.water;G("h_wprog").style.width=Math.round(ST.water/8*100)+"%"};
+    g.appendChild(d);
+  }
+}
+
+function buildWeek(){
+  const g=G("wkGrid");g.innerHTML="";
+  const today=new Date().getDay();
+  for(let i=0;i<7;i++){
+    const d=document.createElement("div");
+    let cls="wd";
+    if(i===today)cls+=" today";
+    else if(i===ST.selDay)cls+=" sel";
+    d.className=cls;
+    d.innerHTML=`<div class="wdn">${DIAS[i]}</div><div class="wdd">${TREINOS[i].t==="treino"?"🟢":"⚪"}</div>`;
+    const day=i;
+    d.onclick=()=>{ST.selDay=day;buildWeek();buildTrain()};
+    g.appendChild(d);
+  }
+}
+
+function buildTrain(){
+  const t=TREINOS[ST.selDay];
+  const c=G("trContent");
+  const today=new Date().getDay();
+  if(t.t==="rest"){
+    c.innerHTML=`<div class="card bt-orange"><span class="dp or">${t.n}</span><div class="ct" style="margin-bottom:6px">Recuperação ativa</div><div class="cs">O músculo cresce no descanso. Hidrate-se, durma bem e faça alongamentos leves.</div><div class="tip-box" style="margin-top:10px"><div class="tip-t">💡 Hoje</div><div class="tip-s">Caminhada 20-30min · Alongamento · 7-9h sono · Manter alimentação</div></div></div>`;
+    return;
+  }
+  let html=`<div class="card bt-blue"><span class="dp bl">${t.n}</span><div class="cs" style="margin-bottom:12px">${t.ex.length} exercícios · Descanso 60-90s entre séries</div>`;
+  t.ex.forEach((ex,i)=>{
+    const key=`${ST.selDay}-${i}`;const done=ST.ex.has(key);const isT=ST.selDay===today;
+    html+=`<div class="ex-row"><div class="cc ${done?"ok":""}" onclick="togEx('${key}',this,${isT})"></div><div style="flex:1"><div class="ex-n">${ex.n}</div><div class="ex-d">${ex.s}</div><div class="ex-m">${ex.m}</div></div></div>`;
+  });
+  html+=`</div><div class="tip-box"><div class="tip-t">💡 Dica</div><div class="tip-s">Foque na conexão mente-músculo. Aumente 2,5kg quando completar todas as séries com boa forma.</div></div>`;
+  c.innerHTML=html;
+}
+
+function togEx(key,el,isT){if(ST.ex.has(key))ST.ex.delete(key);else ST.ex.add(key);el.classList.toggle("ok");if(isT)updHoje();}
+
+function buildMeals(){
+  const c=G("mealCard");let html="";
+  REFS.forEach((r,i)=>{
+    const done=ST.ml.has(i);
+    html+=`<div class="meal-row"><div class="meal-hr"><div><div class="meal-t">${r.h} — ${r.n}</div><div class="meal-k">${r.k} kcal</div></div><div class="cs2 ${done?"ok":""}" onclick="togMl(${i},this)"></div></div><div class="meal-n">${r.n}</div><div class="meal-f">${r.f}</div></div>`;
+  });
+  c.innerHTML=html;
+}
+
+function togMl(i,el){if(ST.ml.has(i))ST.ml.delete(i);else ST.ml.add(i);el.classList.toggle("ok");updHoje();}
+
+function updHoje(){
+  const today=new Date().getDay();const t=TREINOS[today];
+  let de=0;t.ex.forEach((_,i)=>{if(ST.ex.has(`${today}-${i}`))de++});
+  G("s_ex").textContent=de;G("s_ml").textContent=ST.ml.size;
+  const tasks=get("luizTasks")||[];G("s_tk").textContent=tasks.filter(t=>t.done).length;
+  G("h_trbadge").textContent=t.n;G("h_trbadge").className=`dp ${t.t==="rest"?"or":"bl"}`;
+  const tot=t.ex.length;
+  G("h_trsub").textContent=t.t==="rest"?"Recuperação ativa":`${de} de ${tot} exercícios`;
+  G("h_trprog").style.width=tot>0?Math.round(de/tot*100)+"%":"0%";
+  updBanca();
+}
+
+function updBanca(){
+  const bets=get("luizBets")||[];
+  const lp=bets.reduce((s,b)=>{if(b.res==="W")return s+b.v*(b.o-1);if(b.res==="L")return s-b.v;return s},0);
+  const banca=BANCA0+lp;
+  G("h_banca").textContent="R$ "+banca.toLocaleString("pt-BR",{minimumFractionDigits:2});
+  G("h_lucro").textContent=(lp>=0?"Lucro: +":"Prejuízo: -")+"R$ "+Math.abs(lp).toLocaleString("pt-BR",{minimumFractionDigits:2});
+  G("b_disp").textContent="R$ "+banca.toLocaleString("pt-BR",{minimumFractionDigits:2});
+  const w=bets.filter(b=>b.res==="W").length,l=bets.filter(b=>b.res==="L").length;
+  const tot=bets.reduce((s,b)=>s+b.v,0);
+  const roi=tot>0?(lp/tot*100).toFixed(2):0;
+  G("b_w").textContent=w;G("b_l").textContent=l;
+  G("b_roi").textContent=(roi>=0?"+":"")+roi+"%";
+  G("b_roi").style.color=roi>=0?"#3fb950":"#f85149";
+}
+
+// AGENDA
+function addTask(){
+  const t=G("tk_t").value.trim();if(!t){alert("Informe o título!");return}
+  const tasks=get("luizTasks")||[];
+  tasks.unshift({id:Date.now(),t,d:G("tk_d").value,p:G("tk_p").value,tp:G("tk_tp").value,done:false});
+  set("luizTasks",tasks);G("tk_t").value="";G("tk_d").value="";
+  loadTasks();updHoje();
+}
+function togTask(id){const ts=get("luizTasks")||[];const t=ts.find(t=>t.id===id);if(t)t.done=!t.done;set("luizTasks",ts);loadTasks();updHoje();}
+function delTask(id){set("luizTasks",(get("luizTasks")||[]).filter(t=>t.id!==id));loadTasks();}
+function loadTasks(){
+  const ts=get("luizTasks")||[];const c=G("taskList");
+  if(!ts.length){c.innerHTML=`<div class="cs" style="text-align:center;padding:10px">Nenhuma tarefa</div>`;return}
+  const pb={alta:"ta",media:"tm2",baixa:"tb"},pl={alta:"Alta",media:"Média",baixa:"Baixa"};
+  c.innerHTML=ts.map(t=>{
+    const dt=t.d?new Date(t.d).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
+    return `<div class="task-row"><div class="cc ${t.done?"ok":""}" onclick="togTask(${t.id})"></div><div style="flex:1"><div class="ti ${t.done?"done":""}">${t.t}<span class="tbadge ${pb[t.p]}">${pl[t.p]}</span><span class="tbadge tc">${t.tp}</span></div>${dt?`<div class="tm">📅 ${dt}</div>`:""}</div><button class="tdel" onclick="delTask(${t.id})">×</button></div>`;
+  }).join("");
+}
+
+// APOSTAS
+function addBet(){
+  const j=G("bt_j").value.trim(),o=parseFloat(G("bt_o").value),v=parseFloat(G("bt_v").value);
+  if(!j||!o||!v){alert("Preencha jogo, odd e valor!");return}
+  const bets=get("luizBets")||[];
+  bets.unshift({id:Date.now(),j,lg:G("bt_lg").value,m:G("bt_m").value,c:G("bt_c").value,o,e:parseFloat(G("bt_e").value)||0,v,res:"open",dt:new Date().toLocaleDateString("pt-BR")});
+  set("luizBets",bets);
+  ["bt_j","bt_lg","bt_m","bt_o","bt_e","bt_v"].forEach(id=>G(id).value="");
+  loadBets();updBanca();
+}
+function updBet(id,res){
+  const bets=get("luizBets")||[];const b=bets.find(b=>b.id===id);if(b)b.res=res;
+  set("luizBets",bets);loadBets();updBanca();updHoje();
+}
+function loadBets(){
+  const bets=get("luizBets")||[];const c=G("betList");
+  if(!bets.length){c.innerHTML=`<div class="cs" style="text-align:center;padding:10px">Nenhuma aposta</div>`;return}
+  c.innerHTML=bets.slice(0,20).map(b=>{
+    const lp=b.res==="W"?(b.v*(b.o-1)).toFixed(2):b.res==="L"?(-b.v).toFixed(2):null;
+    return `<div class="bet-row"><div style="display:flex;justify-content:space-between;align-items:center"><div class="bet-j">${b.j}</div><span class="bet-st ${b.res==="W"?"bw":b.res==="L"?"bl2":"bo"}">${b.res==="open"?"Aberta":b.res==="W"?"✓ Win":"✗ Loss"}</span></div><div class="bet-m">${b.lg} · ${b.m} · ${b.c}</div><div style="display:flex;gap:10px;margin-top:4px;font-size:11px"><span>Odd: <b>${b.o}</b></span><span class="bet-edge">Edge: +${b.e}%</span><span>R$ <b>${b.v.toLocaleString("pt-BR")}</b></span></div>${lp?`<div class="bet-lp" style="color:${parseFloat(lp)>=0?"#3fb950":"#f85149"}">${parseFloat(lp)>=0?"Lucro":"Prejuízo"}: R$ ${Math.abs(parseFloat(lp)).toLocaleString("pt-BR",{minimumFractionDigits:2})}</div>`:""}${b.res==="open"?`<div style="display:flex;gap:6px;margin-top:8px"><button onclick="updBet(${b.id},'W')" style="flex:1;background:rgba(35,134,54,0.2);color:#3fb950;border:1px solid rgba(63,185,80,0.3);border-radius:7px;padding:6px;font-size:11px;font-weight:700;cursor:pointer">✓ Ganhou</button><button onclick="updBet(${b.id},'L')" style="flex:1;background:rgba(184,24,24,0.2);color:#f85149;border:1px solid rgba(248,81,73,0.3);border-radius:7px;padding:6px;font-size:11px;font-weight:700;cursor:pointer">✗ Perdeu</button></div>`:""}</div>`;
+  }).join("");
+}
+
+// PROGRESSO
+function saveProgress(){
+  const w=G("pg_w").value;if(!w){alert("Informe o peso!");return}
+  const hist=get("luizHist")||[];
+  hist.unshift({dt:new Date().toLocaleDateString("pt-BR"),w,c:G("pg_c").value,a:G("pg_a").value,wa:G("pg_wa").value,h:G("pg_h").value,n:G("pg_n").value});
+  set("luizHist",hist.slice(0,50));loadPg();
+  ["pg_w","pg_c","pg_a","pg_wa","pg_h","pg_n"].forEach(id=>G(id).value="");
+  alert("Salvo!");
+}
+function loadPg(){
+  const hist=get("luizHist")||[];const c=G("pgList");
+  if(!hist.length){c.innerHTML=`<div class="card"><div class="cs" style="text-align:center;padding:10px">Sem registros</div></div>`;return}
+  c.innerHTML=hist.slice(0,10).map(h=>`<div class="card bt-blue" style="margin-bottom:8px"><div class="cs" style="margin-bottom:6px">${h.dt}</div><div style="display:flex;gap:10px;flex-wrap:wrap">${h.w?`<div><span style="font-size:20px;font-weight:700;color:#58a6ff">${h.w}kg</span></div>`:""}${h.c?`<span class="cs">${h.c}cm peito</span>`:""}${h.a?`<span class="cs">${h.a}cm braço</span>`:""}${h.wa?`<span class="cs">${h.wa}cm cintura</span>`:""}</div>${h.n?`<div class="cs" style="margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.05)">${h.n}</div>`:""}</div>`).join("");
+}
+
+// EVOLUÇÃO — PACIENTES
+function addPac(){
+  const nome=G("pnome").value.trim();if(!nome){alert("Informe o nome!");return}
+  const pacs=get("luizPacs")||[];
+  pacs.push({id:Date.now(),nome,idade:G("pidade").value,leito:G("pleito").value,sala:G("psala").value,diag:G("pdiag").value});
+  set("luizPacs",pacs);
+  ["pnome","pidade","pleito","pdiag"].forEach(id=>G(id).value="");
+  loadEvHist();
+}
+function showPacPicker(ctx){
+  selPacCtx=ctx;
+  const pacs=get("luizPacs")||[];
+  G("pacPickerList").innerHTML=pacs.length?pacs.map(p=>`<div class="pac-card" onclick="pickPac(${p.id})"><div class="pac-n">${p.nome}</div><div class="pac-i">${p.idade?" "+p.idade+" anos":""} ${p.leito?" · "+p.leito:""}</div>${p.diag?`<div class="pac-i" style="color:#58a6ff;margin-top:2px">${p.diag}</div>`:""}<span class="sal-p ${SCLS[p.sala]}">${SALAS[p.sala]}</span></div>`).join(""):`<div class="cs" style="text-align:center;padding:10px">Cadastre pacientes no Histórico</div>`;
+  G("pacPicker").style.display="block";
+  G("ev_evol").style.display="none";G("ev_admissao").style.display="none";G("ev_evhist").style.display="none";
+}
+function pickPac(id){
+  const pacs=get("luizPacs")||[];selPac=pacs.find(p=>p.id===id);
+  G("pacPicker").style.display="none";
+  showEv(selPacCtx==="adm"?"admissao":"evol",null);
+  const html=`<div class="pac-n">${selPac.nome}</div><div class="pac-i">${selPac.idade?" "+selPac.idade+" anos":""} ${selPac.leito?" · "+selPac.leito:""}</div>${selPac.diag?`<div class="pac-i" style="color:#58a6ff;margin-top:2px">${selPac.diag}</div>`:""}<span class="sal-p ${SCLS[selPac.sala]}">${SALAS[selPac.sala]}</span>`;
+  if(selPacCtx==="adm")G("admPacSel").innerHTML=html;
+  else G("evPacSel").innerHTML=html;
+}
+function hidePacPicker(){
+  G("pacPicker").style.display="none";
+  showEv("evol",null);
+}
+function showEv(id,btn){
+  ["evol","admissao","evhist","pacPicker"].forEach(s=>G("ev_"+s).style.display="none");
+  G("ev_"+id).style.display="block";
+  if(btn){document.querySelectorAll(".ps-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");}
+  if(id==="evhist")loadEvHist();
+}
+function loadEvHist(){
+  const hist=get("luizEvHist")||[];const c=G("evHistList");
+  if(!hist.length){c.innerHTML=`<div class="cs" style="text-align:center;padding:10px">Nenhuma evolução salva</div>`;return}
+  c.innerHTML=hist.slice(0,15).map(h=>`<div class="card" style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div><div style="font-size:13px;font-weight:600">${h.pac} <span style="font-size:10px;padding:2px 6px;border-radius:5px;background:${h.tipo==="adm"?"rgba(184,24,24,0.2)":"rgba(35,134,54,0.2)"};color:${h.tipo==="adm"?"#f85149":"#3fb950"}">${h.tipo==="adm"?"Admissão":"Evolução"}</span></div><div class="cs">${h.dt}</div></div><button onclick="cpEvH(${h.id})" style="background:#21262d;color:#58a6ff;border:1px solid #30363d;border-radius:7px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer">Copiar</button></div>`).join("");
+}
+function cpEvH(id){
+  const hist=get("luizEvHist")||[];const item=hist.find(h=>h.id===id);if(!item)return;
+  navigator.clipboard.writeText(item.txt).then(()=>alert("Copiado!")).catch(()=>alert("Copie manualmente."));
+}
+
+// VOZ
+function mkRec(num){
+  if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognition'in window)){alert("Use Safari no iPhone ou Chrome no Android para voz.");return null;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const r=new SR();r.lang="pt-BR";r.continuous=true;r.interimResults=true;
+  r.onresult=e=>{
+    let fi="",in2="";
+    for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)fi+=e.results[i][0].transcript+" ";else in2+=e.results[i][0].transcript;}
+    if(num===1){v1+=fi;G("vt1").textContent=(v1+in2)||"Ouvindo...";G("vt1").style.color="#e6edf3";}
+    else{v2+=fi;G("vt2").textContent=(v2+in2)||"Ouvindo...";G("vt2").style.color="#e6edf3";}
+  };
+  r.onend=()=>{if(num===1?isRec1:isRec2)r.start();};
+  return r;
+}
+function toggleMic(n){
+  if(n===1){
+    if(!rec1)rec1=mkRec(1);if(!rec1)return;
+    if(!isRec1){v1="";G("vt1").textContent="";rec1.start();isRec1=true;G("mic1").className="mic-btn mic-rec";G("mic1").textContent="⏹";G("mst1").textContent="Gravando...";}
+    else{rec1.stop();isRec1=false;G("mic1").className="mic-btn mic-idle";G("mic1").textContent="🎤";G("mst1").textContent="Encerrado";}
+  }else{
+    if(!rec2)rec2=mkRec(2);if(!rec2)return;
+    if(!isRec2){v2="";G("vt2").textContent="";rec2.start();isRec2=true;G("mic2").className="mic-btn mic-rec";G("mic2").textContent="⏹";G("mst2").textContent="Gravando...";}
+    else{rec2.stop();isRec2=false;G("mic2").className="mic-btn mic-idle";G("mic2").textContent="🎤";G("mst2").textContent="Encerrado";}
+  }
+}
+function addSh(n,txt){if(n===1){v1+=(v1?" ":"")+txt;G("vt1").textContent=v1;G("vt1").style.color="#e6edf3";}}
+
+function getLabLine(){
+  const d=G("e_ld").value,lt=G("e_lt").value,hb=G("e_hb").value;
+  if(!lt&&!hb)return "";
+  const dt=d?new Date(d).toLocaleDateString("pt-BR"):new Date().toLocaleDateString("pt-BR");
+  return `Laboratório (${dt}): Lt: ${lt||"_"} / Hb: ${hb||"_"} / Ht: ${G("e_ht").value||"_"}% / Plaq: ${G("e_pl").value||"_"} mil / PCR: ${G("e_pcr").value||"_"} / Ur: ${G("e_ur").value||"_"} / Cr: ${G("e_cr").value||"_"} / Na: ${G("e_na").value||"_"} / K: ${G("e_k").value||"_"}`;
+}
+
+async function gerarEv(){
+  if(!selPac){alert("Selecione um paciente!");return}
+  const vd=v1||G("vt1").textContent;
+  const pa=G("e_pa").value,fc=G("e_fc").value,fr=G("e_fr").value,tax=G("e_tax").value,spo2=G("e_spo2").value,hgt=G("e_hgt").value;
+  const cond=G("e_cond").value,alta=G("e_alta").value,pend=G("e_pend").value,plt=G("e_plt").value;
+  const lab=getLabLine();const hoje=new Date().toLocaleDateString("pt-BR");
+  const sala=SALAS[selPac.sala];
+  const prompt=`Você é assistente médico. Gere evolução diária COMPLETA no formato exato. Dados: Paciente ${selPac.nome}, ${selPac.idade||"?"}a, ${sala}, ${selPac.leito||""}, ${selPac.diag||""}, plantão ${plt}, data ${hoje}. Voz: ${vd||"nenhum"}. Vitais: PA ${pa||"_"} FC ${fc||"_"} FR ${fr||"_"} Tax ${tax||"_"} SpO2 ${spo2||"_"} HGT ${hgt||"_"}. ${lab}. Condutas: ${cond||"manter conduta prévia"}. Alta: ${alta?new Date(alta).toLocaleDateString("pt-BR"):"_"}. Pendências: ${pend||"sem pendências"}.
+
+FORMATO EXATO:
+#${sala} - Plantão ${plt}
+#Evolução diária: [texto corrido formal com os dados fornecidos. Se sem queixas, use: "Paciente sem queixas, passou o período sem intercorrências, mantendo-se clínica e hemodinamicamente estável sem uso de DVA e/ou O2 suplementar; diurese espontânea, não quantificada; dejeções habituais, sem alterações; pressão arterial e glicemias controladas."]
+
+Exame físico:
+Ectoscopia: LOTE, BEG, corado, hidratado, anictérico, acianótico.
+Neuro: ECG 15, pupilas isofotorreagentes; sem déficits neurológicos focais.
+Ap. Cardiovascular: Bulhas rítmicas e normofonéticas em 2 tempos, sem sopros ou extrassístoles.
+Ap. Respiratório: Murmúrio vesicular universalmente audível, sem ruídos adventícios, boa saturimetria em ar ambiente.
+Abdome: RHA +, indolor a palpação, sem visceromegalias.
+Extremidades: Quentes e bem perfundidas. Sem edemas, panturrilhas sem sinais de empastamento, TEC < 3s.
+
+Sinais vitais: PA: ${pa||"___"} mmHg | FC: ${fc||"___"} bpm | FR: ${fr||"___"} irpm | Tax: ${tax||"___"}°C | SpO2: ${spo2||"___"}% ${hgt?`| HGT: ${hgt} mg/dL`:""}
+
+${lab?`#Exames laboratoriais:\n-${lab}`:""}
+${alta||pend?`#Previsão de alta / pendências:\n-Data prevista: ${alta?new Date(alta).toLocaleDateString("pt-BR"):"_"} / Pendências: ${pend||"sem pendências"}`:""}
+#Condutas:
+${cond?cond.split("\n").map(c=>"-"+c.trim()).join("\n"):"-Manter conduta prévia"}
+
+Responda APENAS com o texto da evolução.`;
+
+  G("ev_load").style.display="block";G("ev_out").style.display="none";
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,messages:[{role:"user",content:prompt}]})});
+    const d=await r.json();
+    G("ev_txt").textContent=d.content&&d.content[0]?d.content[0].text:"Erro.";
+    G("ev_load").style.display="none";G("ev_out").style.display="block";
+  }catch(e){G("ev_load").style.display="none";alert("Erro IA: "+e.message);}
+}
+
+async function gerarAdm(){
+  if(!selPac){alert("Selecione um paciente!");return}
+  const vd=v2||G("vt2").textContent;
+  const hoje=new Date().toLocaleDateString("pt-BR");const sala=SALAS[selPac.sala];
+  const prompt=`Você é assistente médico. Gere nota de admissão COMPLETA no formato exato. Paciente: ${selPac.nome}, ${selPac.idade||"?"}a, ${sala}, ${selPac.leito||""}, data ${hoje}, plantão ${G("a_plt").value}. Voz: ${vd||"nenhum"}. HDA: ${G("a_hda").value||"não informada"}. Patologias: ${G("a_pat").value||"nega"}. ${G("a_tab").value}/${G("a_etil").value}. Cirurgias: ${G("a_cir").value||"nega"}. Alergias: ${G("a_alg").value||"NKDA"}. Medicações: ${G("a_med").value||"nega"}. Vitais: PA ${G("a_pa").value||"_"} FC ${G("a_fc").value||"_"} FR ${G("a_fr").value||"_"} Tax ${G("a_tax").value||"_"} SpO2 ${G("a_spo2").value||"_"} HGT ${G("a_hgt").value||"_"}. Problemas: ${G("a_prob").value||"a definir"}. Condutas: ${G("a_cond").value||"a definir"}.
+
+FORMATO EXATO:
+#${sala} - Plantão ${G("a_plt").value}
+#Problemas:
+[listar problemas]
+
+#História mórbida pregressa:
+-Patologias prévias: ${G("a_pat").value||"Nega comorbidades"}
+-Hábitos: ${G("a_tab").value} / ${G("a_etil").value}
+-Cirurgias prévias: ${G("a_cir").value||"Nega"}
+-Alergias: ${G("a_alg").value||"NKDA"}
+-Medicações de uso prévio: ${G("a_med").value||"Nega"}
+
+#Evolução do internamento:
+[HDA em texto corrido formal]
+
+#Evolução diária:
+[estado na admissão]
+
+Exame físico:
+Ectoscopia: LOTE, BEG, corado, hidratado, anictérico, acianótico.
+Neuro: ECG 15, pupilas isofotorreagentes; sem déficits neurológicos focais.
+Ap. Cardiovascular: Bulhas rítmicas e normofonéticas em 2 tempos, sem sopros ou extrassístoles.
+Ap. Respiratório: Murmúrio vesicular universalmente audível, sem ruídos adventícios, boa saturimetria em ar ambiente.
+Abdome: RHA +, indolor a palpação, sem visceromegalias.
+Extremidades: Quentes e bem perfundidas. Sem edemas, panturrilhas sem sinais de empastamento, TEC < 3s.
+
+Sinais vitais admissão: PA: ${G("a_pa").value||"___"} mmHg | FC: ${G("a_fc").value||"___"} bpm | FR: ${G("a_fr").value||"___"} irpm | Tax: ${G("a_tax").value||"___"}°C | SpO2: ${G("a_spo2").value||"___"}% ${G("a_hgt").value?`| HGT: ${G("a_hgt").value} mg/dL`:""}
+
+#Exames laboratoriais:
+-Laboratório (${hoje}): Lt: ___ / Hb: ___ / Ht: ___% / Plaq: ___ mil / PCR: ___ / Ur: ___ / Cr: ___ / Na: ___ / K: ___
+
+#Exames de imagem e outros exames complementares
+-Pendente conforme solicitação
+
+#Previsão de alta / pendências:
+-Data prevista de alta: ___ / Pendências: Aguardar evolução clínica
+
+#Condutas:
+${G("a_cond").value?G("a_cond").value.split("\n").map(c=>"-"+c.trim()).join("\n"):"-Monitorização dos sinais vitais\n-Solicitar exames laboratoriais\n-Hidratação conforme necessidade"}
+
+Responda APENAS com o texto.`;
+
+  G("adm_load").style.display="block";G("adm_out").style.display="none";
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,messages:[{role:"user",content:prompt}]})});
+    const d=await r.json();
+    G("adm_txt").textContent=d.content&&d.content[0]?d.content[0].text:"Erro.";
+    G("adm_load").style.display="none";G("adm_out").style.display="block";
+  }catch(e){G("adm_load").style.display="none";alert("Erro IA: "+e.message);}
+}
+
+function saveEv(tipo){
+  const txtId=tipo==="adm"?"adm_txt":"ev_txt";
+  const txt=G(txtId).textContent;if(!txt)return;
+  const hist=get("luizEvHist")||[];
+  hist.unshift({id:Date.now(),tipo,pac:selPac?selPac.nome:"?",dt:new Date().toLocaleDateString("pt-BR")+" "+new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),txt});
+  set("luizEvHist",hist.slice(0,100));alert("Salvo!");
+}
+
+function cpTxt(tid,bid){
+  const txt=G(tid).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{const b=G(bid);b.textContent="✓ Copiado!";b.className="copy-btn copied";setTimeout(()=>{b.textContent="Copiar texto";b.className="copy-btn"},2000);}).catch(()=>{const r=document.createRange();r.selectNode(G(tid));window.getSelection().removeAllRanges();window.getSelection().addRange(r);document.execCommand("copy");window.getSelection().removeAllRanges();alert("Copiado!");});
+}
+
+// CLÍNICA — CALCULADORAS
+function showClin(id,btn){
+  ["calc","escores","protos"].forEach(s=>G("clin_"+s).style.display="none");
+  G("clin_"+id).style.display="block";
+  document.querySelectorAll(".sc3-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+function ri(id,txt,cls){G(id).textContent=txt;G(id).className="ri "+cls;}
+function showRb(id){G(id).style.display="block";}
+
+function cIMC(){
+  const p=parseFloat(G("imc_p").value),a=parseFloat(G("imc_a").value);if(!p||!a)return;
+  const v=(p/(a*a)).toFixed(1);G("imc_v").textContent=v;
+  let t,c;if(v<18.5){t="Abaixo do peso";c="ri-m";}else if(v<25){t="Peso normal";c="ri-n";}else if(v<30){t="Sobrepeso";c="ri-m";}else if(v<35){t="Obesidade grau I";c="ri-a";}else if(v<40){t="Obesidade grau II";c="ri-a";}else{t="Obesidade grau III";c="ri-a";}
+  ri("imc_i",t,c);showRb("imc_r");
+}
+function cCG(){
+  const id=parseFloat(G("cg_id").value),p=parseFloat(G("cg_p").value),cr=parseFloat(G("cg_cr").value),sx=G("cg_sx").value;if(!id||!p||!cr)return;
+  let v=((140-id)*p)/(72*cr);if(sx==="F")v*=0.85;v=Math.round(v);G("cg_v").textContent=v;
+  let t,c;if(v>=90){t="Normal";c="ri-n";}else if(v>=60){t="DRC estágio 2";c="ri-n";}else if(v>=30){t="DRC estágio 3";c="ri-m";}else if(v>=15){t="DRC estágio 4";c="ri-a";}else{t="DRC estágio 5 — Ajustar!";c="ri-a";}
+  ri("cg_i",t,c);showRb("cg_r");
+}
+function cOsm(){
+  const na=parseFloat(G("osm_na").value),gl=parseFloat(G("osm_gl").value),ur=parseFloat(G("osm_ur").value);if(!na||!gl||!ur)return;
+  const v=Math.round(2*na+(gl/18)+(ur/6));G("osm_v").textContent=v;
+  let t,c;if(v<275){t="Hipoosmolar";c="ri-m";}else if(v<=295){t="Normal";c="ri-n";}else if(v<=320){t="Hiperosmolar leve";c="ri-m";}else{t="Hiperosmolar grave";c="ri-a";}
+  ri("osm_i",t,c);showRb("osm_r");
+}
+function cNa(){
+  const a=parseFloat(G("na_a").value),d=parseFloat(G("na_d").value),p=parseFloat(G("na_p").value),sx=G("na_sx").value;if(!a||!d||!p)return;
+  const v=Math.round((d-a)*(sx==="M"?0.6:0.5)*p);G("na_v").textContent=v;
+  ri("na_i","≈ "+Math.round(v/0.513)+"mL de SF 0,9%","ri-m");showRb("na_r");
+}
+function cIns(){
+  const g=parseFloat(G("ins_g").value),f=parseFloat(G("ins_f").value);if(!g)return;
+  if(g<=180){G("ins_v").textContent="0";ri("ins_i","Sem correção","ri-n");showRb("ins_r");return;}
+  const v=Math.max(0,Math.round((g-100)/f));G("ins_v").textContent=v;
+  let t,c;if(g<=250){t="Hiperglicemia leve";c="ri-m";}else if(g<=400){t="Hiperglicemia moderada";c="ri-a";}else{t="Grave — avaliar CAD";c="ri-a";}
+  ri("ins_i",t,c);showRb("ins_r");
+}
+
+// ESCORES
+const SC_DEFS={
+  curb:[{l:"Confusão mental (LOTE)",p:1},{l:"Ureia > 19 mg/dL",p:1},{l:"FR ≥ 30 irpm",p:1},{l:"PA sistólica < 90 ou diastólica ≤ 60",p:1},{l:"Idade ≥ 65 anos",p:1}],
+  wells:[{l:"TVP clinicamente suspeita",p:3},{l:"Diagnóstico alternativo menos provável",p:3},{l:"FC > 100 bpm",p:1.5},{l:"Imobilização/cirurgia últimas 4 semanas",p:1.5},{l:"TVP ou TEP prévio",p:1.5},{l:"Hemoptise",p:1},{l:"Neoplasia ativa",p:1}],
+  chads:[{l:"Insuficiência cardíaca",p:1},{l:"Hipertensão arterial",p:1},{l:"Idade ≥ 75 anos",p:2},{l:"Diabetes mellitus",p:1},{l:"AVC/AIT prévio",p:2},{l:"Doença vascular",p:1},{l:"Idade 65-74 anos",p:1},{l:"Sexo feminino",p:1}],
+  sofa:[{l:"PaO2/FiO2 < 400",p:1},{l:"PaO2/FiO2 < 300",p:1},{l:"Plaquetas < 150k",p:1},{l:"Plaquetas < 50k",p:1},{l:"Bilirrubina 1,2-1,9",p:1},{l:"Bilirrubina > 6",p:1},{l:"PAM < 70",p:1},{l:"DVA em uso",p:1},{l:"Glasgow < 13",p:1},{l:"Glasgow < 10",p:1},{l:"Cr 1,2-1,9",p:1},{l:"Cr > 3,5",p:1}],
+};
+const SC_VALS={curb:[],wells:[],chads:[],sofa:[]};
+
+function buildScores(){
+  Object.keys(SC_DEFS).forEach(k=>{
+    SC_VALS[k]=SC_DEFS[k].map(()=>0);
+    const c=G(k+"_it");
+    c.innerHTML=SC_DEFS[k].map((item,i)=>`<div class="sc-row"><div class="sc-l">${item.l} <span style="color:#58a6ff;font-size:10px">(+${item.p})</span></div><div class="sc-btns"><button class="sc-btn no2" id="${k}_${i}_n" onclick="setSc('${k}',${i},0,${item.p})">Não</button><button class="sc-btn" id="${k}_${i}_s" onclick="setSc('${k}',${i},${item.p},${item.p})">Sim</button></div></div>`).join("");
+    updSc(k);
+  });
+}
+
+function setSc(k,i,v,p){
+  SC_VALS[k][i]=v;
+  G(k+"_"+i+"_n").className="sc-btn"+(v===0?" no2":"");
+  G(k+"_"+i+"_s").className="sc-btn"+(v>0?" yes":"");
+  updSc(k);
+}
+
+function updSc(k){
+  const tot=SC_VALS[k].reduce((a,b)=>a+b,0);
+  G(k+"_tot").textContent=tot%1===0?tot:tot.toFixed(1);
+  let ri2="",rk2="",rkc="",ric="";
+  if(k==="curb"){
+    if(tot<=1){ri2="Ambulatorial";ric="ri-n";rk2="Baixo risco";rkc="rk-l";}
+    else if(tot===2){ri2="Considerar internação";ric="ri-m";rk2="Intermediário";rkc="rk-m";}
+    else{ri2="Internação/UTI";ric="ri-a";rk2="Alto risco";rkc="rk-h";}
+  }else if(k==="wells"){
+    if(tot<2){ri2="Baixa — D-dímero";ric="ri-n";rk2="Baixa";rkc="rk-l";}
+    else if(tot<=6){ri2="Moderada — AngioTC";ric="ri-m";rk2="Moderada";rkc="rk-m";}
+    else{ri2="Alta — anticoagular";ric="ri-a";rk2="Alta";rkc="rk-h";}
+  }else if(k==="chads"){
+    if(tot===0){ri2="Sem anticoagulação";ric="ri-n";rk2="Muito baixo";rkc="rk-l";}
+    else if(tot===1){ri2="Considerar anticoagular";ric="ri-m";rk2="Baixo";rkc="rk-m";}
+    else{ri2="Anticoagular";ric="ri-a";rk2="Alto";rkc="rk-h";}
+  }else if(k==="sofa"){
+    if(tot<2){ri2="Sem disfunção significativa";ric="ri-n";}
+    else if(tot<6){ri2="Disfunção moderada";ric="ri-m";}
+    else if(tot<10){ri2="Mortalidade ~40%";ric="ri-a";}
+    else{ri2="Mortalidade >80%";ric="ri-a";}
+  }
+  if(G(k+"_ri"))G(k+"_ri").className="ri "+ric,G(k+"_ri").textContent=ri2;
+  if(rk2&&G(k+"_rk"))G(k+"_rk").className="rk "+rkc,G(k+"_rk").textContent=rk2;
+}
+
+// PROTOCOLOS
+function buildProtos(){
+  const defs={
+    sep:[{t:"Hemoculturas (2 pares)",s:"Antes do ATB — não atrasar antibiótico"},
+         {t:"Dosar lactato",s:"Lactato > 2 = hipoperfusão · > 4 = choque séptico"},
+         {t:"Antibioticoterapia amplo espectro",s:"Conforme foco — dentro de 1 hora"},
+         {t:"Cristaloide 30mL/kg em 3h",s:"SF 0,9% ou Ringer — reavalie após cada 500mL"},
+         {t:"Vasopressor se PAM < 65",s:"Noradrenalina — primeira escolha"},
+         {t:"Reavaliar perfusão",s:"Diurese > 0,5mL/kg/h · Lactato controle em 2h"}],
+    avc:[{t:"TC crânio sem contraste",s:"Excluir hemorragia — pré-requisito para rt-PA"},
+         {t:"Janela trombolítica",s:"Até 4,5h do início dos sintomas"},
+         {t:"Critérios exclusão",s:"AVC < 3m · Cirurgia recente · Plaq < 100k · INR > 1,7 · PA > 185x110"},
+         {t:"rt-PA 0,9mg/kg (máx 90mg)",s:"10% bolus IV · 90% infusão em 60min"},
+         {t:"PA pré-trombólise",s:"< 185x110 · Labetalol ou nicardipina"},
+         {t:"Monitorização neurológica",s:"Glasgow a cada 15min durante infusão"}],
+    has:[{t:"Emergência vs Urgência",s:"Emergência: lesão órgão-alvo → 20-25% em 1h | Urgência: sem LOA → 24-48h VO"},
+         {t:"Nitroprussiato IV",s:"Emergência: 0,3-10 mcg/kg/min · Proteger da luz"},
+         {t:"Nitroglicerina IV",s:"Preferir em SCA/EAP · 5-10 mcg/min · Titular"},
+         {t:"Captopril VO 25mg",s:"Urgência sem LOA · Reavaliar em 30-60min"},
+         {t:"Meta PA",s:"Emergência: 160x100 na 1ª hora · Urgência: < 180x110 em 24h"}],
+    cad:[{t:"Confirmar diagnóstico",s:"Glicose > 250 + cetonemia + pH < 7,3 / Bic < 18"},
+         {t:"Hidratação vigorosa",s:"SF 0,9% 1L na 1ª hora · Depois 250-500mL/h"},
+         {t:"Insulina regular IV",s:"0,1 UI/kg bolus → 0,1 UI/kg/h · Só se K+ > 3,5"},
+         {t:"Reposição de potássio",s:"K+ < 3,5: repor antes da insulina · 3,5-5,5: 20-30mEq/h junto"},
+         {t:"Bicarbonato",s:"Somente se pH < 7,0 · 100mEq em 400mL em 2h"},
+         {t:"Critérios de resolução",s:"Glicose < 200 + Bic ≥ 18 + pH > 7,3 + AG ≤ 12"}],
+  };
+  Object.keys(defs).forEach(k=>{
+    G("prot_"+k).innerHTML=defs[k].map((s,i)=>`<div class="step-row"><div class="step-n">${i+1}</div><div style="flex:1"><div class="step-t">${s.t}</div><div class="step-s">${s.s}</div></div></div>`).join("");
+  });
+}
+
+// URGÊNCIA — DROGAS
+function getPeso(){return parseFloat(G("urg_peso").value)||0}
+function drg(did,rid,vid,mid,conc){
+  const d=parseFloat(G(did).value),p=getPeso();if(!d)return;
+  if(!p){alert("Informe o peso do paciente!");return}
+  const r=((d*p*60)/conc).toFixed(1);
+  G(vid).textContent=r+" mL/h";if(mid)G(mid).textContent=(d*p).toFixed(1)+" mcg/min total";
+  G(rid).style.display="block";
+}
+function cNor(){drg("nor_d","nor_r","nor_v","nor_m",16)}
+function cDop(){drg("dop_d","dop_r","dop_v","dop_m",800)}
+function cDob(){drg("dob_d","dob_r","dob_v","dob_m",1000)}
+function cAdr(){drg("adr_d","adr_r","adr_v","adr_m",16)}
+function cNit(){const d=parseFloat(G("nit_d").value);if(!d)return;G("nit_v").textContent=((d*60)/100).toFixed(1)+" mL/h";G("nit_r").style.display="block";}
+function cNtp(){const d=parseFloat(G("ntp_d").value),p=getPeso();if(!d)return;if(!p){alert("Informe o peso!");return}G("ntp_v").textContent=((d*p*60)/200).toFixed(1)+" mL/h";G("ntp_r").style.display="block";}
+function cVas(){const d=parseFloat(G("vas_d").value);G("vas_v").textContent=((d*60)/0.2).toFixed(1)+" mL/h";}
+function cAmi(){const d=parseFloat(G("ami_f").value);G("ami_v").textContent=((d*60)/1.8).toFixed(1)+" mL/h";}
+function calcAll(){["cNor","cDop","cDob","cAdr","cNtp"].forEach(f=>{if(window[f])window[f]();});}
+
+// INIT
+updHeader();buildWater();buildWeek();buildTrain();buildMeals();updHoje();
+loadTasks();loadBets();loadPg();buildScores();buildProtos();cVas();cAmi();
+updBanca();
+
+// ============ SUPABASE ============
+const SB_URL="https://sqvfepzczgyigfpwmtvu.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNxdmZlcHpjemd5aWdmcHdtdHZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0ODI4MjQsImV4cCI6MjA5MjA1ODgyNH0.HIJ6t5sekxtfLh5aYpzNWNcq87RWjDvREyRSp0BUXEc";
+async function sbGet(t,f=""){try{const r=await fetch(SB_URL+"/rest/v1/"+t+"?"+f,{headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY}});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
+async function sbUpsert(t,d){try{const r=await fetch(SB_URL+"/rest/v1/"+t,{method:"POST",headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json","Prefer":"resolution=merge-duplicates"},body:JSON.stringify(d)});return r.ok;}catch(e){return false;}}
+async function savePacSB(p){return await sbUpsert("app_pacientes",{pac_id:p.id,dados:JSON.stringify(p),atualizado:new Date().toISOString()});}
+async function loadPacsSB(){const r=await sbGet("app_pacientes","select=dados&order=atualizado.desc");if(!r)return null;return r.map(x=>JSON.parse(x.dados));}
+async function saveRascunhoSB(pacId,d){return await sbUpsert("app_rascunhos",{pac_id:pacId,dados:JSON.stringify(d),atualizado:new Date().toISOString()});}
+async function loadRascunhoSB(pacId){const r=await sbGet("app_rascunhos","pac_id=eq."+pacId+"&select=dados");if(r&&r.length>0)return JSON.parse(r[0].dados);return null;}
+
+// ============ PIN ============
+const PIN="0331";
+function checkPin(sec){
+  const inp=document.getElementById(sec+"_pin");
+  if(!inp)return;
+  if(inp.value===PIN){
+    document.getElementById(sec+"_lock").style.display="none";
+    document.getElementById(sec+"_content").style.display="block";
+  }else{
+    inp.value="";
+    alert("PIN incorreto!");
+  }
+}
+
+// ============ CLÍNICA ============
+var _pac=null;
+var _voz="";
+
+function showCl(id){
+  ["cl_lista","cl_novo","cl_prontuario"].forEach(d=>{
+    const el=document.getElementById(d);
+    if(el)el.style.display="none";
+  });
+  const el=document.getElementById("cl_"+id);
+  if(el)el.style.display="block";
+  if(id==="lista")loadPacs();
+}
+
+async function loadPacs(){
+  const online=await loadPacsSB();
+  if(online&&online.length>0)set("luizPacs",online);
+  const pacs=(get("luizPacs")||[]).filter(p=>p.status==="ativo");
+  const cnt=document.getElementById("pac_count");
+  if(cnt)cnt.textContent=pacs.length+" paciente"+(pacs.length!==1?"s":"")+" ativo"+(pacs.length!==1?"s":"");
+  const c=document.getElementById("pacList");
+  if(!c)return;
+  if(!pacs.length){c.innerHTML="<div class='card'><p style='text-align:center;color:#8b949e;padding:20px'>Nenhum paciente ativo.</p></div>";return;}
+  c.innerHTML=pacs.map(p=>"<div class='card' style='cursor:pointer;border-left:3px solid #1f6feb;margin-bottom:8px' onclick='openPac("+p.id+")'>"+
+    "<div style='font-weight:700;color:#e6edf3;font-size:14px'>"+p.nome+"</div>"+
+    "<div style='font-size:12px;color:#8b949e;margin-top:4px'>"+
+    (p.leito?p.leito+" · ":"")+(p.pront?"Pront: "+p.pront:"")+"</div>"+
+    (p.diag?"<div style='font-size:12px;color:#8b949e;margin-top:6px'>"+p.diag.split("\n")[0]+"</div>":"")+
+    (p.alta?"<div style='font-size:11px;color:#d29922;margin-top:4px'>Alta: "+p.alta+"</div>":"")+
+    "</div>"
+  ).join("");
+}
+
+function openPac(id){
+  const pacs=get("luizPacs")||[];
+  _pac=pacs.find(p=>p.id===id);
+  if(!_pac)return;
+  const el=document.getElementById("pr_titulo");
+  if(el)el.textContent=_pac.nome;
+  showCl("prontuario");
+  renderEv();
+}
+
+function addPac(){
+  const nome=(document.getElementById("pn_nome")||{}).value;
+  if(!nome||!nome.trim()){alert("Informe o nome!");return;}
+  const pacs=get("luizPacs")||[];
+  const pac={
+    id:Date.now(),nome:nome.trim(),
+    leito:(document.getElementById("pn_leito")||{}).value||"",
+    pront:(document.getElementById("pn_pront")||{}).value||"",
+    diag:(document.getElementById("pn_diag")||{}).value||"",
+    hmp:(document.getElementById("pn_hmp")||{}).value||"",
+    cir:(document.getElementById("pn_cir")||{}).value||"",
+    alg:(document.getElementById("pn_alg")||{}).value||"",
+    hab:(document.getElementById("pn_hab")||{}).value||"",
+    med:(document.getElementById("pn_med")||{}).value||"",
+    evint:(document.getElementById("pn_evint")||{}).value||"",
+    alta:(document.getElementById("pn_alta")||{}).value||"",
+    dtAdm:(document.getElementById("pn_dtadm")||{}).value||new Date().toISOString().split("T")[0],
+    evolucoes:[],status:"ativo"
+  };
+  pacs.push(pac);
+  set("luizPacs",pacs);
+  savePacSB(pac);
+  ["pn_nome","pn_leito","pn_pront","pn_diag","pn_hmp","pn_cir","pn_alg","pn_hab","pn_med","pn_evint","pn_alta","pn_dtadm"].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value="";
+  });
+  showCl("lista");
+}
+
+function renderEv(){
+  if(!_pac)return;
+  const p=_pac;
+  const evs=p.evolucoes||[];
+  const ul=evs.length?evs[evs.length-1]:null;
+  const probs=(p.diag||"").split("\n").filter(Boolean).map(l=>l.startsWith("-")?l:"- "+l).join("\n");
+  const evD=(ul&&ul.evdiaria)?ul.evdiaria:"Paciente em leito da clínica médica, acompanhado, sem queixas no momento da visita. Passou o período sem intercorrências, mantendo-se clínica e hemodinamicamente estável, eupneico em ar ambiente, sem uso de DVA e/ou O2 suplementar. Dieta via oral com boa aceitação. Diurese e dejeções fisiológicas. Bons níveis pressóricos e glicêmicos.";
+  const sv=(ul&&ul.sv)?ul.sv:"PA: / FC: / FR: / SpO2:";
+  const ef=(ul&&ul.ef)?ul.ef:"LOTE, BEG, corado, hidratado, anictérico, acianótico.\nNeuro: ECG 15, pupilas isofotorreagentes; sem déficits neurológicos focais.\nAp. Cardiovascular: RCR 2T BNF sem sopros ou extrassístoles.\nAp. Respiratório: MVUA sem ruídos adventícios, boa saturimetria em ar ambiente.\nAbdome: RHA +, indolor a palpação, sem visceromegalias, sem IP.\nExtremidades: Sem edemas, panturrilhas livres, TEC < 3s.";
+  const lab=(ul&&ul.labFull)?ul.labFull:"- Lab (xx/xx/2026): Hb: / Ht: / VCM: / Plaq: / LT: / Ur: / Cr: / TFG: / Na: / K:";
+  const img=(ul&&ul.img)?ul.img:"ECG (xx/xx/2026):\nRX de Tórax (xx/xx/2026):";
+  const condL=(ul&&ul.cond)?ul.cond.split("\n").filter(Boolean).map(l=>l.trim().replace(/^-\s*/,"")):[];
+  const cond=condL.join("\n");
+
+  const txt=
+    "Nome do paciente: "+p.nome+"\n"+
+    "Leito: "+(p.leito||"")+"\n"+
+    "Prontuário: "+(p.pront||"")+"\n\n"+
+    "#Clínica Médica\n\n"+
+    "#Problemas:\n"+(probs||"- ")+"\n\n"+
+    "#História mórbida pregressa:\n"+
+    "Patologias prévias: "+(p.hmp||"")+"\n"+
+    "Cirurgias prévias: "+(p.cir||"Nega")+"\n"+
+    "Alergias: "+(p.alg||"Nega")+"\n"+
+    "Hábitos: "+(p.hab||"Nega etilismo e tabagismo")+"\n"+
+    "Medicações de uso prévio: "+(p.med||"")+"\n\n"+
+    "#Evolução do internamento:\n"+
+    (p.evint||"")+"\n\n"+
+    "#Evolução diária:\n"+
+    evD+"\n\n"+
+    "Sinais vitais: "+sv+"\n\n"+
+    "Ao exame físico:\n"+ef+"\n \n"+
+    "#Exames laboratoriais:\n"+lab+"\n\n"+
+    "#Exames de imagem e outros exames complementares\n"+img+"\n\n"+
+    "#Previsão de alta:\n"+(p.alta||"xx/xx/2026")+"\n\n"+
+    "#Condutas:\n"+cond;
+
+  const prev=document.getElementById("ev_preview");
+  if(prev)prev.textContent=txt;
+}
+
+function copiarEvolucao(){
+  const prev=document.getElementById("ev_preview");
+  if(!prev)return;
+  navigator.clipboard.writeText(prev.textContent).then(()=>alert("Copiado!")).catch(()=>{
+    const ta=document.createElement("textarea");
+    ta.value=prev.textContent;document.body.appendChild(ta);ta.select();
+    document.execCommand("copy");document.body.removeChild(ta);alert("Copiado!");
+  });
+}
+
+function cpEv(){
+  const el=document.getElementById("ev_txt");
+  if(!el)return;
+  navigator.clipboard.writeText(el.textContent).then(()=>alert("Copiado!")).catch(()=>{
+    const ta=document.createElement("textarea");
+    ta.value=el.textContent;document.body.appendChild(ta);ta.select();
+    document.execCommand("copy");document.body.removeChild(ta);alert("Copiado!");
+  });
+}
+
+function gerarEv(){
+  if(!_pac){alert("Selecione um paciente!");return;}
+  const g=id=>((document.getElementById(id)||{}).value||"");
+  const pa=g("ev_pa"),fc=g("ev_fc"),fr=g("ev_fr"),spo2=g("ev_spo2"),hgt=g("ev_hgt");
+  const exames=g("ev_exames_brutos").trim();
+  const cond=g("ev_cond").trim();
+  const altaN=g("ev_alta").trim();
+  const hoje=new Date().toLocaleDateString("pt-BR");
+
+  const sv="PA: "+pa+" / FC: "+fc+" / FR: "+fr+" / SpO2: "+spo2+(hgt?" / HGT: "+hgt:"");
+  const evD=_voz||"Paciente em leito da clínica médica, acompanhado, sem queixas no momento da visita. Passou o período sem intercorrências, mantendo-se clínica e hemodinamicamente estável, eupneico em ar ambiente, sem uso de DVA e/ou O2 suplementar. Dieta via oral com boa aceitação. Diurese e dejeções fisiológicas. Bons níveis pressóricos e glicêmicos.";
+  const ef="LOTE, BEG, corado, hidratado, anictérico, acianótico.\nNeuro: ECG 15, pupilas isofotorreagentes; sem déficits neurológicos focais.\nAp. Cardiovascular: RCR 2T BNF sem sopros ou extrassístoles.\nAp. Respiratório: MVUA sem ruídos adventícios, boa saturimetria em ar ambiente.\nAbdome: RHA +, indolor a palpação, sem visceromegalias, sem IP.\nExtremidades: Sem edemas, panturrilhas livres, TEC < 3s.";
+
+  let lab="- Lab ("+hoje+"): Hb: / Ht: / VCM: / Plaq: / LT: / Ur: / Cr: / TFG: / Na: / K:";
+  let img="ECG (xx/xx/2026):\nRX de Tórax (xx/xx/2026):";
+
+  if(exames){
+    function xv(t,ks){for(const k of ks){const i=t.indexOf(k);if(i>=0){const s=t.substring(i+k.length,i+k.length+15).trim();const m=s.match(/^[:\s]*([>\d,]+)/);if(m)return m[1].trim();}}return "";}
+    const hb=xv(exames,["Hemoglobina","Hb:","Hb "]);
+    const ht=xv(exames,["Hematócrito","Ht:","Ht "]);
+    const vcm=xv(exames,["VCM:","VCM "]);
+    const plaq=xv(exames,["Plaquetas","Plaq:","PLAQ","Pqt:"]);
+    const lt=xv(exames,["Leucócitos","Lt:","LT:"]);
+    const ur=xv(exames,["Ureia","Ur:","UR:","URE:"]);
+    const cr=xv(exames,["Creatinina","Cr:","CR:","CREA:"]);
+    const tfg=xv(exames,["TFG:","eTFG"]);
+    const na=xv(exames,["Sódio","Na:","NA:"]);
+    const k=xv(exames,["Potássio","K:","K "]);
+    const inr=xv(exames,["RNI","INR:"]);
+    const lp=[];
+    if(hb)lp.push("Hb: "+hb);if(ht)lp.push("Ht: "+ht);if(vcm)lp.push("VCM: "+vcm);
+    if(plaq)lp.push("Plaq: "+plaq);if(lt)lp.push("LT: "+lt);if(inr)lp.push("INR: "+inr);
+    if(ur)lp.push("Ur: "+ur);if(cr)lp.push("Cr: "+cr);if(tfg)lp.push("TFG: "+tfg);
+    if(na)lp.push("Na: "+na);if(k)lp.push("K: "+k);
+    if(lp.length)lab="- Lab ("+hoje+"): "+lp.join(" / ");
+    const il=[];
+    if(exames.indexOf("ECG")>=0)il.push("ECG ("+hoje+"): ver resultado");
+    if(exames.indexOf("RX")>=0)il.push("RX de Tórax ("+hoje+"): ver resultado");
+    if(exames.indexOf("Tomografia")>=0)il.push("Tomografia ("+hoje+"): ver laudo");
+    if(il.length)img=il.join("\n");
+  }
+
+  const condL=cond?cond.split("\n").filter(Boolean).map(l=>l.trim().replace(/^-\s*/,"")).join("\n"):"";
+  const altaF=altaN||_pac.alta||"xx/xx/2026";
+
+  const txt=
+    "#Evolução diária:\n"+evD+"\n\n"+
+    "Sinais vitais: "+sv+"\n\n"+
+    "Ao exame físico:\n"+ef+"\n \n"+
+    "#Exames laboratoriais:\n"+lab+"\n\n"+
+    "#Exames de imagem e outros exames complementares\n"+img+"\n\n"+
+    "#Previsão de alta:\n"+altaF+"\n\n"+
+    "#Condutas:\n"+condL;
+
+  const el=document.getElementById("ev_txt");
+  if(el)el.textContent=txt;
+  const out=document.getElementById("ev_out");
+  if(out)out.style.display="block";
+  window._evG={evdiaria:evD,sv,ef,labFull:lab,img,cond:condL,alta:altaF,texto:txt};
+}
+
+function saveEv(){
+  if(!_pac)return;
+  const ev=window._evG||{};
+  const obj={id:Date.now(),data:new Date().toLocaleDateString("pt-BR"),
+    evdiaria:ev.evdiaria||"",sv:ev.sv||"",ef:ev.ef||"",
+    labFull:ev.labFull||"",img:ev.img||"",cond:ev.cond||"",
+    alta:ev.alta||"",texto:ev.texto||"",autor:"Dr. Luiz Almeida"};
+  const pacs=get("luizPacs")||[];
+  const idx=pacs.findIndex(p=>p.id===_pac.id);
+  if(idx>=0){
+    if(!pacs[idx].evolucoes)pacs[idx].evolucoes=[];
+    pacs[idx].evolucoes.push(obj);
+    if(ev.alta)pacs[idx].alta=ev.alta;
+    _pac=pacs[idx];
+    set("luizPacs",pacs);
+    savePacSB(_pac);
+  }
+  ["ev_pa","ev_fc","ev_fr","ev_spo2","ev_hgt","ev_exames_brutos","ev_cond","ev_alta"].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value="";
+  });
+  const vb=document.getElementById("vbox_ev");if(vb)vb.textContent="";
+  _voz="";
+  const out=document.getElementById("ev_out");if(out)out.style.display="none";
+  renderEv();
+  alert("Evolução salva!");
+}
+
+async function salvarRascunhoApp(){
+  if(!_pac){alert("Selecione um paciente!");return;}
+  const g=id=>((document.getElementById(id)||{}).value||"");
+  const d={pac_id:_pac.id,voz:_voz||"",
+    pa:g("ev_pa"),fc:g("ev_fc"),fr:g("ev_fr"),spo2:g("ev_spo2"),hgt:g("ev_hgt"),
+    exames:g("ev_exames_brutos"),cond:g("ev_cond"),alta:g("ev_alta")};
+  const ok=await saveRascunhoSB(_pac.id,d);
+  if(ok)alert("Rascunho salvo! Abra no computador e clique em Carregar do celular.");
+  else{set("rascunho_"+_pac.id,d);alert("Salvo localmente.");}
+}
+
+async function carregarRascunhoApp(){
+  if(!_pac)return;
+  const r=await loadRascunhoSB(_pac.id)||get("rascunho_"+_pac.id);
+  if(!r){alert("Nenhum rascunho encontrado.");return;}
+  _voz=r.voz||"";
+  const vb=document.getElementById("vbox_ev");if(vb&&_voz)vb.textContent='"'+_voz+'"';
+  ["pa","fc","fr","spo2","hgt","exames","cond","alta"].forEach(k=>{
+    const el=document.getElementById("ev_"+k);if(el&&r[k])el.value=r[k];
+  });
+  alert("Rascunho carregado! Clique em Gerar evolução.");
+}
+
+function encerrarPac(tipo){
+  if(!_pac)return;
+  if(!confirm(tipo==="alta"?"Confirmar alta?":tipo==="obito"?"Registrar óbito?":"Registrar transferência?"))return;
+  const pacs=get("luizPacs")||[];
+  const idx=pacs.findIndex(p=>p.id===_pac.id);
+  if(idx>=0){pacs[idx].status=tipo;set("luizPacs",pacs);savePacSB(pacs[idx]);}
+  showCl("lista");
+}
+
+function togMic(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert("Microfone não suportado neste navegador.");return;}
+  const mic=document.getElementById("mic_ev");
+  const st=document.getElementById("mic_st");
+  const vb=document.getElementById("vbox_ev");
+  if(window._micAtivo){window._micRec&&window._micRec.stop();return;}
+  const rec=new SR();
+  rec.lang="pt-BR";rec.continuous=true;rec.interimResults=true;
+  window._micRec=rec;window._micAtivo=true;
+  if(mic)mic.style.background="rgba(248,81,73,0.3)";
+  if(st)st.textContent="Gravando...";
+  rec.onresult=e=>{
+    let f="";
+    for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)f+=e.results[i][0].transcript;}
+    if(f){_voz+=(_voz?" ":"")+f;}
+    if(vb)vb.textContent=_voz;
+  };
+  rec.onend=()=>{
+    window._micAtivo=false;
+    if(mic)mic.style.background="";
+    if(st)st.textContent="Toque para gravar";
+  };
+  rec.start();
+}
+
+function addSh(txt){
+  _voz+=(_voz?" ":"")+txt;
+  const vb=document.getElementById("vbox_ev");
+  if(vb)vb.textContent=_voz;
+}
+
+// PRÉ-CARREGAR SÔNIA
+(function(){
+  const pacs=get("luizPacs")||[];
+  if(!pacs.find(p=>p.nome&&p.nome.includes("Sonia"))){
+    pacs.push({
+      id:1713600001,nome:"Sonia Maria da Silva",leito:"17B",pront:"14424311",
+      diag:"- PO 16/04 amputação infrapatelar esquerda\n- PO 12/04 debridamento\n- Pé diabético com abscesso plantar E",
+      hmp:"HAS, DM, Hipotiroidismo, Dislipidemia",
+      cir:"Miomectomia há cerca de 10 anos. Debridamento 12/04/2026. Amputação infrapatelar E 16/04/2026.",
+      alg:"Nega",hab:"Nega etilismo e tabagismo",
+      med:"Losartana / AAS / Sinvastatina / Purant 200mcg / Insulina NPH 26-00-00 / Regular 00-06-04",
+      evint:"Paciente residente em Manoel Vitorino, trazida em ambulância básica, deu entrada em 08/04/2026 com relato de ferida infectada em pé E há aprox. 15 dias (SIC). Internada, iniciado ceftriaxona + clindamicina D2 10/04, escalonado para Tazocin D0 11/04. Avaliada pela cirurgia geral em 08/04/2026, ferida sem ponto de flutuação. Realizou debridamento 12/04, indicada amputação transtársica com chance de amputação maior. Realizou 02 bolsas de HC 11/04 e 01 bolsa 14/04. Realizou 16/04 amputação infrapatelar esquerda sem intercorrências.",
+      alta:"22/04/2026",dtAdm:"2026-04-08",
+      evolucoes:[{
+        id:1713600002,data:"21/04/2026",
+        evdiaria:"Paciente em leito da clínica médica, acompanhada, sem queixas no momento da visita. Passou o período sem intercorrências, mantendo-se clínica e hemodinamicamente estável, eupneica em ar ambiente, sem uso de DVA e/ou O2 suplementar. Dieta via oral com boa aceitação. Diurese e dejeções fisiológicas. Bons níveis pressóricos e glicêmicos.",
+        sv:"PA: 130x70 mmHg / FC: 75 bpm / FR: 12 irpm / SpO2: 98% AA / HGT (05:00h): 174 mg/dL",
+        ef:"LOTE, BEG, corada, hidratada, anictérica, acianótica.\nNeuro: ECG 15, pupilas isofotorreagentes; sem déficits neurológicos focais.\nAp. Cardiovascular: RCR 2T BNF sem sopros ou extrassístoles.\nAp. Respiratório: MVUA sem ruídos adventícios, boa saturimetria em ar ambiente.\nAbdome: RHA +, indolor a palpação, sem visceromegalias, sem IP.\nExtremidades: Sem edemas, panturrilhas livres, TEC < 3s. MIE: FO limpa e seca, suturada, sem sinais flogísticos.",
+        labFull:"- Lab (08/04/2026): Hb 8,7 Ht 26 Plaq 363 mil LT 22120 (B0S85) RNI 1,23 TP 16,1 TTPA 1,56 UR 50 CR 0,6 NA 136 K 3,8\n- Lab (10/04/2026): LT 24.720 (N92,0 E0,0 B1,0 L4,0 M3,0) / Hb 7,7 / Ht 23,2 / PLAQ 385.000 / URE 68,0 / CREA 1,20 / Na 131 / K 3,6\n- Lab (11/04/2026): LT 27.500 (N94,0 E0,0 B1,0 L3,0 M2,0) / Hb 9,6 / Ht 28,8 / PLAQ 367.000 / URE 84,0 / CREA 1,20 / Na 134 / K 3,5\n- Lab (13/04/2026): Hb 9,1 / Ht 27,5 / HCM 27,3 / Plaq 401 mil / LT 21080 / Neut 19390 / Eos 210 / Baso 0 / Linf 1050 / Mono 420 / Ur 91 / Cr 1,2 / TFG 51 / Na 136 / K 3,9\n- Lab (15/04/2026): Hb 9,5 / Ht 28,5 / HCM 27,5 / Plaq 399 mil / LT 19180 / Neut 16900 / Eos 20 / Baso 80 / Linf 1590 / Mono 590 / Ur 62 / Cr 0,9 / TFG 72 / Na 129 / K 3,9\n- Lab (18/04/2026): Hb 9,0 / Ht 27,5 / HCM 27,4 / VCM 83,8 / Plaq 385 mil / LT 11760 / Neut 9360 / Eos 180 / Baso 60 / Linf 1730 / Mono 440 / Ur 47 / Cr 0,6 / TFG >90 / Na 138 / K 4,2\n- Lab (19/04/2026): Hb: 7,8 / Ht: 23,4 / Lt: 11410 / Pqt: 334mil / INR: 1,10 / Ur: 44 / Cr: 0,5 / Na: 139 / K: 4,3",
+        img:"ECG (08/04/2026): Sinusal / Normal\nRX de Tórax (08/04/2026): Infiltrado perihilar direita (?)",
+        cond:"Solicito laboratório;\nOtimizado analgesia;\nMantenho Tazocin D0 11/04;\nVigilância glicêmica: NPH 20-08-06 (19/04/26);\nEm programação de alta hospitalar.",
+        autor:"Dr. Luiz Almeida"
+      }],status:"ativo"
+    });
+    set("luizPacs",pacs);
+  }
+})();
+
+function showFerr(id,btn){
+  ["calc","escores","protos","drogas"].forEach(s=>{const el=G("ferr_"+s);if(el)el.style.display="none";});
+  const el=G("ferr_"+id);if(el)el.style.display="block";
+  document.querySelectorAll(".t3").forEach(b=>b.classList.remove("active"));
+  if(btn)btn.classList.add("active");
+  if(id==="drogas"){cVas();cAmi();}
+}
+
+// CALCULADORAS
+function ri2(id,txt,cls){const el=G(id);if(el){el.textContent=txt;el.className="ri "+cls;}}
+function showRb(id){const el=G(id);if(el)el.style.display="block";}
+function cIMC(){const p=parseFloat(G("imc_p").value),a=parseFloat(G("imc_a").value);if(!p||!a)return;const v=(p/(a*a)).toFixed(1);G("imc_v").textContent=v;let t,c;if(v<18.5){t="Abaixo do peso";c="ri-m";}else if(v<25){t="Normal";c="ri-n";}else if(v<30){t="Sobrepeso";c="ri-m";}else if(v<35){t="Obesidade I";c="ri-a";}else if(v<40){t="Obesidade II";c="ri-a";}else{t="Obesidade III";c="ri-a";}ri2("imc_i",t,c);showRb("imc_r");}
+function cCG(){const id=parseFloat(G("cg_id").value),p=parseFloat(G("cg_p").value),cr=parseFloat(G("cg_cr").value),sx=G("cg_sx").value;if(!id||!p||!cr)return;let v=((140-id)*p)/(72*cr);if(sx==="F")v*=0.85;v=Math.round(v);G("cg_v").textContent=v;let t,c;if(v>=90){t="Normal";c="ri-n";}else if(v>=60){t="DRC estágio 2";c="ri-n";}else if(v>=30){t="DRC estágio 3";c="ri-m";}else if(v>=15){t="DRC estágio 4";c="ri-a";}else{t="DRC estágio 5 — Ajustar!";c="ri-a";}ri2("cg_i",t,c);showRb("cg_r");}
+function cOsm(){const na=parseFloat(G("osm_na").value),gl=parseFloat(G("osm_gl").value),ur=parseFloat(G("osm_ur").value);if(!na||!gl||!ur)return;const v=Math.round(2*na+(gl/18)+(ur/6));G("osm_v").textContent=v;let t,c;if(v<275){t="Hipoosmolar";c="ri-m";}else if(v<=295){t="Normal";c="ri-n";}else if(v<=320){t="Hiperosmolar leve";c="ri-m";}else{t="Hiperosmolar grave";c="ri-a";}ri2("osm_i",t,c);showRb("osm_r");}
+function cNa(){const a=parseFloat(G("na_a").value),d=parseFloat(G("na_d").value),p=parseFloat(G("na_p").value),sx=G("na_sx").value;if(!a||!d||!p)return;const v=Math.round((d-a)*(sx==="M"?0.6:0.5)*p);G("na_v").textContent=v;ri2("na_i","≈ "+Math.round(v/0.513)+"mL de SF 0,9%","ri-m");showRb("na_r");}
+function cIns(){const g=parseFloat(G("ins_g").value),f=parseFloat(G("ins_f").value);if(!g)return;if(g<=180){G("ins_v").textContent="0";ri2("ins_i","Sem correção","ri-n");showRb("ins_r");return;}const v=Math.max(0,Math.round((g-100)/f));G("ins_v").textContent=v;let t,c;if(g<=250){t="Hiperglicemia leve";c="ri-m";}else if(g<=400){t="Hiperglicemia moderada";c="ri-a";}else{t="Grave — avaliar CAD";c="ri-a";}ri2("ins_i",t,c);showRb("ins_r");}
+
+// ESCORES
+const SC_DEFS={
+  curb:[{l:"Confusão mental (LOTE)",p:1},{l:"Ureia > 19 mg/dL",p:1},{l:"FR ≥ 30 irpm",p:1},{l:"PA sistólica < 90 ou diastólica ≤ 60",p:1},{l:"Idade ≥ 65 anos",p:1}],
+  wells:[{l:"TVP clinicamente suspeita",p:3},{l:"Diagnóstico alternativo menos provável",p:3},{l:"FC > 100 bpm",p:1.5},{l:"Imobilização/cirurgia últimas 4 semanas",p:1.5},{l:"TVP ou TEP prévio",p:1.5},{l:"Hemoptise",p:1},{l:"Neoplasia ativa",p:1}],
+  chads:[{l:"Insuficiência cardíaca",p:1},{l:"Hipertensão arterial",p:1},{l:"Idade ≥ 75 anos",p:2},{l:"Diabetes mellitus",p:1},{l:"AVC/AIT prévio",p:2},{l:"Doença vascular",p:1},{l:"Idade 65-74 anos",p:1},{l:"Sexo feminino",p:1}],
+  sofa:[{l:"PaO2/FiO2 < 400",p:1},{l:"PaO2/FiO2 < 300",p:1},{l:"Plaquetas < 150k",p:1},{l:"Plaquetas < 50k",p:1},{l:"Bilirrubina 1,2-1,9",p:1},{l:"Bilirrubina > 6",p:1},{l:"PAM < 70",p:1},{l:"DVA em uso",p:1},{l:"Glasgow < 13",p:1},{l:"Glasgow < 10",p:1},{l:"Cr 1,2-1,9",p:1},{l:"Cr > 3,5",p:1}],
+};
+const SC_VALS={curb:[],wells:[],chads:[],sofa:[]};
+function buildScores(){
+  Object.keys(SC_DEFS).forEach(k=>{
+    SC_VALS[k]=SC_DEFS[k].map(()=>0);
+    G(k+"_it").innerHTML=SC_DEFS[k].map((item,i)=>`<div class="sc-row"><div class="sc-l">${item.l} <span style="color:#58a6ff;font-size:10px">(+${item.p})</span></div><div class="sc-btns"><button class="sc-btn no2" id="${k}_${i}_n" onclick="setSc('${k}',${i},0)">Não</button><button class="sc-btn" id="${k}_${i}_s" onclick="setSc('${k}',${i},${item.p})">Sim</button></div></div>`).join("");
+    updSc(k);
+  });
+}
+function setSc(k,i,v){
+  SC_VALS[k][i]=v;
+  G(k+"_"+i+"_n").className="sc-btn"+(v===0?" no2":"");
+  G(k+"_"+i+"_s").className="sc-btn"+(v>0?" yes":"");
+  updSc(k);
+}
+function updSc(k){
+  const tot=SC_VALS[k].reduce((a,b)=>a+b,0);
+  G(k+"_tot").textContent=tot%1===0?tot:tot.toFixed(1);
+  let ri3="",rk3="",rkc="",ric="";
+  if(k==="curb"){if(tot<=1){ri3="Ambulatorial";ric="ri-n";rk3="Baixo risco";rkc="rk-l";}else if(tot===2){ri3="Considerar internação";ric="ri-m";rk3="Intermediário";rkc="rk-m";}else{ri3="Internação/UTI";ric="ri-a";rk3="Alto risco";rkc="rk-h";}}
+  else if(k==="wells"){if(tot<2){ri3="Baixa — D-dímero";ric="ri-n";rk3="Baixa";rkc="rk-l";}else if(tot<=6){ri3="Moderada — AngioTC";ric="ri-m";rk3="Moderada";rkc="rk-m";}else{ri3="Alta — anticoagular";ric="ri-a";rk3="Alta";rkc="rk-h";}}
+  else if(k==="chads"){if(tot===0){ri3="Sem anticoagulação";ric="ri-n";rk3="Muito baixo";rkc="rk-l";}else if(tot===1){ri3="Considerar anticoagular";ric="ri-m";rk3="Baixo";rkc="rk-m";}else{ri3="Anticoagular";ric="ri-a";rk3="Alto";rkc="rk-h";}}
+  else if(k==="sofa"){if(tot<2){ri3="Sem disfunção significativa";ric="ri-n";}else if(tot<6){ri3="Disfunção moderada";ric="ri-m";}else if(tot<10){ri3="Mortalidade ~40%";ric="ri-a";}else{ri3="Mortalidade >80%";ric="ri-a";}}
+  if(G(k+"_ri"))G(k+"_ri").className="ri "+ric,G(k+"_ri").textContent=ri3;
+  if(rk3&&G(k+"_rk"))G(k+"_rk").className="rk "+rkc,G(k+"_rk").textContent=rk3;
+}
+
+// PROTOCOLOS
+function buildProtos(){
+  const defs={
+    sep:[{t:"Hemoculturas (2 pares)",s:"Antes do ATB — não atrasar antibiótico"},{t:"Dosar lactato",s:"Lactato > 2 = hipoperfusão · > 4 = choque séptico"},{t:"Antibioticoterapia amplo espectro",s:"Conforme foco — dentro de 1 hora"},{t:"Cristaloide 30mL/kg em 3h",s:"SF 0,9% — reavalie após cada 500mL"},{t:"Vasopressor se PAM < 65",s:"Noradrenalina — primeira escolha"},{t:"Reavaliar perfusão",s:"Diurese > 0,5mL/kg/h · Lactato em 2h"}],
+    avc:[{t:"TC crânio sem contraste",s:"Excluir hemorragia — pré-requisito rt-PA"},{t:"Janela trombolítica",s:"Até 4,5h do início dos sintomas"},{t:"Critérios exclusão",s:"AVC < 3m · Plaq < 100k · INR > 1,7 · PA > 185x110"},{t:"rt-PA 0,9mg/kg (máx 90mg)",s:"10% bolus · 90% infusão 60min"},{t:"PA pré-trombólise",s:"< 185x110 · Labetalol ou nicardipina"},{t:"Monitorização neurológica",s:"Glasgow a cada 15min durante infusão"}],
+    has:[{t:"Emergência vs Urgência",s:"Emergência: LOA → 20-25% em 1h | Urgência: sem LOA → 24-48h VO"},{t:"Nitroprussiato IV",s:"0,3-10 mcg/kg/min · Proteger da luz"},{t:"Nitroglicerina IV",s:"Preferir SCA/EAP · 5-10 mcg/min · Titular"},{t:"Captopril VO 25mg",s:"Urgência sem LOA · Reavaliar em 30-60min"},{t:"Meta PA",s:"Emergência: 160x100 na 1ª hora"}],
+    cad:[{t:"Confirmar diagnóstico",s:"Glicose > 250 + cetonemia + pH < 7,3"},{t:"Hidratação vigorosa",s:"SF 0,9% 1L na 1ª hora · 250-500mL/h depois"},{t:"Insulina regular IV",s:"0,1 UI/kg bolus → 0,1 UI/kg/h · Só se K+ > 3,5"},{t:"Reposição de potássio",s:"K+ < 3,5: repor antes da insulina"},{t:"Bicarbonato",s:"Somente se pH < 7,0 · 100mEq em 400mL/2h"},{t:"Critérios de resolução",s:"Glicose < 200 + Bic ≥ 18 + pH > 7,3"}],
+  };
+  Object.keys(defs).forEach(k=>{
+    G("prot_"+k).innerHTML=defs[k].map((s,i)=>`<div class="step-row"><div class="step-n">${i+1}</div><div style="flex:1"><div class="step-t">${s.t}</div><div class="step-s">${s.s}</div></div></div>`).join("");
+  });
+}
+
+// DROGAS
+function getPeso(){return parseFloat(G("urg_peso").value)||0}
+function drg(did,rid,vid,mid,conc){const d=parseFloat(G(did).value),p=getPeso();if(!d)return;if(!p){alert("Informe o peso!");return}const r=((d*p*60)/conc).toFixed(1);G(vid).textContent=r+" mL/h";if(mid)G(mid).textContent=(d*p).toFixed(1)+" mcg/min";G(rid).style.display="block";}
+function cNor(){drg("nor_d","nor_r","nor_v","nor_m",16)}
+function cDop(){drg("dop_d","dop_r","dop_v",null,800)}
+function cDob(){drg("dob_d","dob_r","dob_v",null,1000)}
+function cAdr(){drg("adr_d","adr_r","adr_v",null,16)}
+function cNit(){const d=parseFloat(G("nit_d").value);if(!d)return;G("nit_v").textContent=((d*60)/100).toFixed(1)+" mL/h";G("nit_r").style.display="block";}
+function cNtp(){const d=parseFloat(G("ntp_d").value),p=getPeso();if(!d)return;if(!p){alert("Informe o peso!");return}G("ntp_v").textContent=((d*p*60)/200).toFixed(1)+" mL/h";G("ntp_r").style.display="block";}
+function cVas(){const d=parseFloat(G("vas_d").value);G("vas_v").textContent=((d*60)/0.2).toFixed(1)+" mL/h";}
+function cAmi(){const d=parseFloat(G("ami_f").value);G("ami_v").textContent=((d*60)/1.8).toFixed(1)+" mL/h";}
+function calcAll(){["cNor","cDop","cDob","cAdr","cNtp"].forEach(f=>{if(window[f])window[f]();});}
+
+// FERRAMENTAS TABS — fix das 4 tabs
+document.querySelectorAll(".t3").forEach(btn=>{
+  btn.onclick=function(){
+    const id=this.getAttribute("onclick").match(/showFerr\\('(\\w+)'/)[1];
+    showFerr(id,this);
+  };
+});
+
+// INIT
+updHeader();buildWater();buildWeek();buildTrain();buildMeals();updHoje();
+loadTasks();loadBets();loadPg();buildScores();buildProtos();cVas();cAmi();
+
+function togglePwd(id, pwd){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(el.textContent.includes('•')){
+    el.textContent = pwd;
+    el.style.color = '#3fb950';
+  } else {
+    el.textContent = '••••••••';
+    el.style.color = '';
+  }
+}
+</script>
+</body>
+</html>'''
+
+with open('/mnt/user-data/outputs/luiz_app_v3.html', 'w', encoding='utf-8') as f:
+    f.write(html)
+print("OK")
+PYEOF
+python3 /home/claude/app_v3.py",
+      "description": "Criar app v3 com clínica médica completa"
+    },
+    "message": "Criar app v3 com clínica médica completa",
+    "integration_name": null,
+    "integration_icon_url": null,
+    "icon_name": "commandLine",
+    "context": null,
+    "display_content": {
+      "type": "json_block",
+      "json_block": "{"language": "bash", "code": "cat << 'PYEOF' > /home/claude/app_v3.py\
+html = r'''<!DOCTYPE html>\
+<html lang=\\"pt-BR\\">\
+<head>\
+<meta charset=\\"UTF-8\\">\
+<meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\\">\
+<meta name=\\"apple-mobile-web-app-capable\\" content=\\"yes\\">\
+<meta name=\\"apple-mobile-web-app-status-bar-style\\" content=\\"black-translucent\\">\
+<meta name=\\"apple-mobile-web-app-title\\" content=\\"Dr. Luiz App\\">\
+<title>Dr. Luiz App</title>\
+<style>\
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}\
+body{font-family:-apple-system,BlinkMacSystemFont,\\"Segoe UI\\",sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh}\
+.header{background:#161b22;padding:14px 20px 12px;position:sticky;top:0;z-index:100;border-bottom:1px solid #30363d}\
+.header-row{display:flex;justify-content:space-between;align-items:center}\
+.header-title{font-size:18px;font-weight:700;background:linear-gradient(90deg,#58a6ff,#3fb950);-webkit-background-clip:text;-webkit-text-fill-color:transparent}\
+.header-date{font-size:11px;color:#8b949e;margin-top:2px}\
+.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#1f6feb,#238636);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff}\
+.nav{display:flex;background:#161b22;border-bottom:1px solid #30363d;overflow-x:auto;scrollbar-width:none}\
+.nav::-webkit-scrollbar{display:none}\
+.nb{flex-shrink:0;min-width:58px;padding:10px 6px 8px;border:none;background:transparent;color:#8b949e;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:600;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:0.3px}\
+.nb.active{color:#58a6ff;border-bottom-color:#58a6ff}\
+.ni{font-size:17px}\
+.page{display:none;padding:14px;padding-bottom:50px}\
+.page.active{display:block}\
+.sl{font-size:10px;font-weight:700;color:#8b949e;text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px}\
+.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden}\
+.card.bt::before{content:\\"\\";position:absolute;top:0;left:0;right:0;height:2px}\
+.card.bt-bl::before{background:linear-gradient(90deg,#1f6feb,#58a6ff)}\
+.card.bt-gr::before{background:linear-gradient(90deg,#238636,#3fb950)}\
+.card.bt-rd::before{background:linear-gradient(90deg,#b91c1c,#f85149)}\
+.card.bt-or::before{background:linear-gradient(90deg,#9e6a03,#d29922)}\
+.card.bt-pu::before{background:linear-gradient(90deg,#6e40c9,#bc8cff)}\
+.ct{font-size:14px;font-weight:600;color:#e6edf3;margin-bottom:4px}\
+.cs{font-size:12px;color:#8b949e;line-height:1.5}\
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}\
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}\
+.sc{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:12px;text-align:center}\
+.sn{font-size:26px;font-weight:700}\
+.sn-bl{background:linear-gradient(135deg,#1f6feb,#58a6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}\
+.sn-gr{background:linear-gradient(135deg,#238636,#3fb950);-webkit-background-clip:text;-webkit-text-fill-color:transparent}\
+.sn-or{background:linear-gradient(135deg,#9e6a03,#d29922);-webkit-background-clip:text;-webkit-text-fill-color:transparent}\
+.sn-pu{background:linear-gradient(135deg,#6e40c9,#bc8cff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}\
+.sl2{font-size:11px;color:#8b949e;margin-top:3px}\
+.pw{background:rgba(255,255,255,0.06);border-radius:4px;height:5px;margin-top:8px;overflow:hidden}\
+.pf{height:100%;border-radius:4px;transition:width 0.3s}\
+.pf-bl{background:linear-gradient(90deg,#1f6feb,#58a6ff)}\
+.pf-gr{background:linear-gradient(90deg,#238636,#3fb950)}\
+.cc{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justif
+
+function togglePwd(id, pwd){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(el.textContent.includes('•')){
+    el.textContent = pwd;
+    el.style.color = '#3fb950';
+  } else {
+    el.textContent = '••••••••';
+    el.style.color = '';
+  }
+}
+</script>
+</body>
+</html>
